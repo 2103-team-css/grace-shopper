@@ -146,7 +146,7 @@ function populateProducts(num) {
       code: UUID(),
       name: name,
       category: type,
-      quantity: Math.ceil(Math.random() * 15),
+      quantity: Math.ceil(Math.random() * 10),
       description: loremipsum[rand],
       price: (Math.random() * 1200).toFixed(2),
       // createdAt timestamp will autopopulate upon seeding
@@ -193,6 +193,7 @@ const seed = async () => {
           userId: singleUser.id,
           productId: singleProduct.id,
           quantity: randQuantity,
+          price: singleProduct.price,
           total: randQuantity * singleProduct.price,
         };
 
