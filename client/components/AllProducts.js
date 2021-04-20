@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchProducts } from '../redux/products';
+import { fetchProducts } from '../store/redux/products';
 
-const AllProducts = (props) => {
-  return (
-    <div className='all-products-container'>Container for All Products</div>
-  );
-};
+// const AllProducts = (props) => {
+//   console.log(props);
+//   return (
+//     <div className='all-products-container'>Container for All Products</div>
+//   );
+// };
+
+export class AllProducts extends Component {
+  componentDidMount() {
+    this.props.getProducts();
+  }
+
+  render() {
+    console.log(this.props);
+    return <div>hello world</div>;
+  }
+}
 
 const mapState = (state) => {
   return {
@@ -17,8 +29,8 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getProducts: () => dispatch(fetchProducts),
+    getProducts: () => dispatch(fetchProducts()),
   };
 };
 
-export default AllProducts;
+export default connect(mapState, mapDispatch)(AllProducts);
