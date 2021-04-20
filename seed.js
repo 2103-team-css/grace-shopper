@@ -35,10 +35,6 @@ const users = [
     },
 ];
 
-const imageShuffler = () => {
-    //randomly select an image from appropriate list
-}
-
 const drumsImages = [
     "https://learnex.com.mx/home/wp-content/uploads/2018/02/drums-1024x697.jpg",
     "https://bothners.co.za/wp-content/uploads/2018/12/Mapex-PRODIGY-5-Piece-RED-ROCK-SIZES-DRUMKIT.jpg",
@@ -144,7 +140,7 @@ function populateProducts(num)  {
             default:
                 console.log('Error occurred populating a name or image.');
         }
-
+        const precision = 100;
         let instance = {
             // id will autopopulate upon seeding
             code: UUID(),
@@ -152,7 +148,7 @@ function populateProducts(num)  {
             type: type,
             quantity: Math.floor(Math.random(1, 15)),
             description: loremipsum[rand],
-            price: Math.random(0, 1200),
+            price: Math.random(0, 1200).toFixed(2),
             // createdAt timestamp will autopopulate upon seeding
         }
 
@@ -175,6 +171,17 @@ const seed = async () => {
         await Promise.all(products.map(product => {
             return Products.create(product);
         }));
+
+        // still need to seed the cart instances
+        const allUsers = Users.findAll();
+        const allProducts = Products.findAll();
+        const randUser = Math.floor(Math.random(0, 5));
+        const randProduct = Math.floor(Math.random(0, 100));
+        const singleUser = allUsers[randUser];
+        const singleProduct = allProducts[randProduct];
+
+        // Cart.create --> pass in rand user id, rand product id, quantity and total
+        await Cart.create( { userId: singleUser.id, productId: singleProduct.id, quantity: 2, total: (2 * singleProduct.price) } );
 
     } catch (err) {
         console.log(err);
