@@ -15,6 +15,13 @@ const Cart = db.define('cart', {
       min: 0,
     },
   },
+  price: {
+    type: Sequelize.FLOAT,
+    allowNull: false,
+    validate: {
+      min: 0,
+    },
+  },
   total: {
     type: Sequelize.FLOAT,
     allowNull: false,
