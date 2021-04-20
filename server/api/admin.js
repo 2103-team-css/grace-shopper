@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Product } = require("../db");
+const { Product, User } = require("../db");
 module.exports = router;
 
 const isLoggedIn = async (req, res, next) => {
@@ -24,6 +24,17 @@ const isAdmin = async (req, res, next) => {
   }
 };
 
+router.get("/admin/users"),
+  isloggedin,
+  isAdmin,
+  async (req, res, next) => {
+    try {
+      const user = await User.findAll();
+      res.send(user);
+    } catch (err) {
+      next(err);
+    }
+  };
 router.post("/admin/products", isloggedin, isAdmin, async (req, res, next) => {
   try {
     const product = new Product();
