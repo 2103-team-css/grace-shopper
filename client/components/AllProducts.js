@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchProducts } from '../store/redux/products';
+import { fetchProducts } from '../store/products';
 
 // const AllProducts = (props) => {
 //   console.log(props);
