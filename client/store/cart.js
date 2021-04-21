@@ -163,6 +163,10 @@ export const removeCart = (userId) => {
   };
 };
 
+const existsDuplicate = (cart, newItem) => {
+  return cart.some((item) => item.cart.productId === newItem.cart.productId);
+};
+
 const setLocalCart = (cart) => {
   localStorage.setItem('localCart', JSON.stringify(cart));
 };
@@ -175,7 +179,12 @@ export default function cartReducer(state = [], action) {
       return action.cart;
     case ADD_TO_CART:
       newState = [...state, action.cartItem];
-      if (action.local) setLocalCart(newState);
+      if (action.local) {
+        if (existsDuplicate(state, action.cartItem)) {
+          return state;
+        }
+        setLocalCart(newState);
+      }
       return newState;
     case REMOVE_FROM_CART:
       newState = state.filter((item) => {

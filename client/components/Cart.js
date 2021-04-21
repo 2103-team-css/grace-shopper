@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateCartItem, deleteCartItem } from '../store/cart';
+import { updateCartItem, deleteCartItem, removeCart } from '../store/cart';
 
 const Cart = () => {
   const userId = useSelector((state) => state.auth.id);
@@ -10,6 +10,13 @@ const Cart = () => {
   return (
     <div>
       Cart:
+      <button
+        onClick={() => {
+          dispatch(removeCart(userId));
+        }}
+      >
+        Clear Cart
+      </button>
       <ul>
         {cart.map((item) => {
           return (
