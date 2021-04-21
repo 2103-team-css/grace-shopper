@@ -2,24 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchProducts } from '../store/products';
+import { createCartItem } from '../store/cart';
 
 const AllProducts = (props) => {
   useEffect(() => {
     props.getProducts();
   }, []);
-  const { products } = props;
+  const { products, userId } = props;
 
-  const percussionArr = products.filter(
-    (product) => product.category === 'percussion'
-  );
+  const percussionArr = products.filter((product) => product.category === 'percussion');
 
-  const stringsArr = products.filter(
-    (product) => product.category === 'string'
-  );
+  const stringsArr = products.filter((product) => product.category === 'string');
   const keysArr = products.filter((product) => product.category === 'keys');
-  const accessoriesArr = products.filter(
-    (product) => product.category === 'accessories'
-  );
+  const accessoriesArr = products.filter((product) => product.category === 'accessories');
 
   const [perc, setPerc] = useState(true);
   const [strs, setStr] = useState(true);
@@ -61,38 +56,26 @@ const AllProducts = (props) => {
   console.log('accessory', access);
   console.log('strings>>>>', strs);
   return (
-    <div className='all-products-container'>
-      <div className='filter-div'>
+    <div className="all-products-container">
+      <div className="filter-div">
         <h3>Filter By Category</h3>
         <label>Percussion:</label>
 
         <input
-          type='checkbox'
-          name='perc'
+          type="checkbox"
+          name="perc"
           checked={perc}
           value={perc}
           onChange={updatePercussion}
         />
         <label>Strings:</label>
-        <input
-          type='checkbox'
-          name='strs'
-          checked={strs}
-          value={strs}
-          onChange={updateString}
-        />
+        <input type="checkbox" name="strs" checked={strs} value={strs} onChange={updateString} />
         <label>Keys:</label>
-        <input
-          type='checkbox'
-          name='keys'
-          checked={keys}
-          value={keys}
-          onChange={updateKey}
-        />
+        <input type="checkbox" name="keys" checked={keys} value={keys} onChange={updateKey} />
         <label>Accesories:</label>
         <input
-          type='checkbox'
-          name='access'
+          type="checkbox"
+          name="access"
           checked={access}
           value={access}
           onChange={updateAccessory}
@@ -100,17 +83,23 @@ const AllProducts = (props) => {
       </div>
       {filteredProd.map((product) => {
         return (
-          <div key={product.id} className='product-container'>
+          <div key={product.id} className="product-container">
             <img
               src={product.imageUrl}
               alt={product.name}
-              heigt='150'
-              width='200'
-              className='product-image'
+              heigt="150"
+              width="200"
+              className="product-image"
             />
             <h3>Name:{product.name}</h3>
             <p>Price: ${product.price}</p>
-            <p>Add To Cart</p>
+            <button
+              onClick={() => {
+                props.addToCart(userId, product.name, product.price, 1, product.id);
+              }}
+            >
+              Add to Cart
+            </button>
             <p>{product.quantity} Left in Stock</p>
             <p>{product.category}</p>
           </div>
@@ -123,12 +112,15 @@ const AllProducts = (props) => {
 const mapState = (state) => {
   return {
     products: state.products,
+    userId: state.auth.id,
   };
 };
 
 const mapDispatch = (dispatch) => {
   return {
     getProducts: () => dispatch(fetchProducts()),
+    addToCart: (userId, name, price, quantity, productId) =>
+      dispatch(createCartItem(userId, name, price, quantity, productId)),
   };
 };
 

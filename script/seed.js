@@ -116,25 +116,24 @@ function populateProducts(num) {
   for (let i = 0; i < num; i++) {
     let rand = Math.floor(Math.random() * 4);
     let type = types[rand];
-    let image = '';
+    let imageUrl = '';
     let name = '';
 
     switch (type) {
       case 'accessories':
-        image = otherImages[Math.floor(Math.random() * otherImages.length) - 1];
+        imageUrl = otherImages[Math.floor(Math.random() * otherImages.length) - 1];
         name = 'Accessory Product';
         break;
       case 'percussion':
-        image = drumsImages[Math.floor(Math.random() * drumsImages.length) - 1];
+        imageUrl = drumsImages[Math.floor(Math.random() * drumsImages.length) - 1];
         name = 'Drumkit Product';
         break;
       case 'keys':
-        image = keysImages[Math.floor(Math.random() * keysImages.length) - 1];
+        imageUrl = keysImages[Math.floor(Math.random() * keysImages.length) - 1];
         name = 'Keyboard/Piano Product';
         break;
       case 'string':
-        image =
-          stringImages[Math.floor(Math.random() * stringImages.length) - 1];
+        imageUrl = stringImages[Math.floor(Math.random() * stringImages.length) - 1];
         name = 'String Instrument Product';
         break;
       default:
@@ -149,6 +148,7 @@ function populateProducts(num) {
       quantity: Math.ceil(Math.random() * 10),
       description: loremipsum[rand],
       price: (Math.random() * 1200).toFixed(2),
+      imageUrl,
       // createdAt timestamp will autopopulate upon seeding
     };
 
@@ -192,8 +192,6 @@ const seed = async () => {
           userId: singleUser.id,
           productId: singleProduct.id,
           quantity: randQuantity,
-          price: singleProduct.price,
-          total: randQuantity * singleProduct.price,
         };
 
         carts.push(cartInstance);
