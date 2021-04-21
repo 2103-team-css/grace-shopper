@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { createProduct } from "../store/createProduct";
+import { createProduct } from "../store/products";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
