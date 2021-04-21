@@ -4,6 +4,7 @@ import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 import AllProducts from './components/AllProducts';
 import { Login, Signup } from './components/AuthForm';
 import Home from './components/Home';
+// import DropDownFilter from './components/DropDownFilter';
 import { me } from './store';
 
 /**
@@ -27,8 +28,9 @@ class Routes extends Component {
           </Switch>
         ) : (
           <Switch>
+            {/* <Route path='/dropdown' component={DropDownFilter} /> */}
             <Route path='/products' component={AllProducts} />
-            <Route path='/' exact component={Login} />
+            <Route exact path='/' exact component={Login} />
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
           </Switch>

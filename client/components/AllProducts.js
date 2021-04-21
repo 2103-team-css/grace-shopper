@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchProducts } from '../store/products';
@@ -8,42 +8,114 @@ const AllProducts = (props) => {
     props.getProducts();
   }, []);
   const { products } = props;
-  console.log(products);
 
-  //l 23 filt products before map
-  //arr of filt prod
-  //l28 use that instead of using full prod array
-  //filt conneted to state
-  //loc state holds filt
+  const percussionArr = products.filter(
+    (product) => product.category === 'percussion'
+  );
 
+  const stringsArr = products.filter(
+    (product) => product.category === 'string'
+  );
+  const keysArr = products.filter((product) => product.category === 'keys');
+  const accessoriesArr = products.filter(
+    (product) => product.category === 'accessories'
+  );
+
+  const [perc, setPerc] = useState(true);
+  const [strs, setStr] = useState(true);
+  const [keys, setKeys] = useState(true);
+  const [access, setAccess] = useState(true);
+
+  const filteredArr = (products, category) => {
+    return products.filter((product) => product.category !== category);
+  };
+
+  const updatePercussion = (evt) => {
+    evt.preventDefault();
+    setPerc(evt.target.checked);
+  };
+
+  const updateString = (evt) => {
+    evt.preventDefault();
+    setStr(evt.target.checked);
+  };
+
+  const updateKey = (evt) => {
+    evt.preventDefault();
+    setKeys(evt.target.checked);
+  };
+
+  const updateAccessory = (evt) => {
+    evt.preventDefault;
+    setAccess(evt.target.checked);
+  };
+
+  let filteredProd = [...products]; //all of the prod
+  if (perc === false) filteredProd = filteredArr(filteredProd, 'percussion');
+  if (strs === false) filteredProd = filteredArr(filteredProd, 'string');
+  if (keys === false) filteredProd = filteredArr(filteredProd, 'keys');
+  if (access === false) filteredProd = filteredArr(filteredProd, 'accessories');
+
+  console.log('percussion>>>>>', perc);
+  console.log('keys>>>>', keys);
+  console.log('accessory', access);
+  console.log('strings>>>>', strs);
   return (
     <div className='all-products-container'>
       <div className='filter-div'>
-        <label for='products'>Filter by product category</label>
-        <select name='instruments' id='instruments'>
-          <option value='percussion'>percussion</option>
-          <option value='strings'>strings</option>
-          <option value='keys'>keys</option>
-          <option value='accessories'>accessories</option>
-        </select>
-        {products.map((product) => {
-          return (
-            <div key={product.id} className='product-container'>
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                heigt='150'
-                width='200'
-                className='product-image'
-              />
-              <h3>Name:{product.name}</h3>
-              <p>Price: ${product.price}</p>
-              <p>Add To Cart</p>
-              <p>{product.quantity} Left in Stock</p>
-            </div>
-          );
-        })}
+        <h3>Filter By Category</h3>
+        <label>Percussion:</label>
+
+        <input
+          type='checkbox'
+          name='perc'
+          checked={perc}
+          value={perc}
+          onChange={updatePercussion}
+        />
+        <label>Strings:</label>
+        <input
+          type='checkbox'
+          name='strs'
+          checked={strs}
+          value={strs}
+          onChange={updateString}
+        />
+        <label>Keys:</label>
+        <input
+          type='checkbox'
+          name='keys'
+          checked={keys}
+          value={keys}
+          onChange={updateKey}
+        />
+        <label>Accesories:</label>
+        <input
+          type='checkbox'
+          name='access'
+          checked={access}
+          value={access}
+          onChange={updateAccessory}
+        />
       </div>
+      {filteredProd.map((product) => {
+        return (
+          <div key={product.id} className='product-container'>
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              heigt='150'
+              width='200'
+              className='product-image'
+            />
+            <h3>Name:{product.name}</h3>
+            <p>Price: ${product.price}</p>
+            <p>Add To Cart</p>
+            <p>{product.quantity} Left in Stock</p>
+            <p>{product.category}</p>
+          </div>
+        );
+      })}
     </div>
   );
 };
