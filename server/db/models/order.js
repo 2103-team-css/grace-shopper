@@ -8,6 +8,10 @@ const Order = db.define('order', {
     autoIncrement: true,
     allowNull: false,
   },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
   quantity: {
     type: Sequelize.INTEGER,
     allowNull: false,
