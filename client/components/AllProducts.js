@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { fetchProducts } from '../store/products';
 import { createCartItem } from '../store/cart';
 
@@ -9,18 +8,6 @@ const AllProducts = (props) => {
     props.getProducts();
   }, []);
   const { products, userId } = props;
-
-  const percussionArr = products.filter(
-    (product) => product.category === 'percussion'
-  );
-
-  const stringsArr = products.filter(
-    (product) => product.category === 'string'
-  );
-  const keysArr = products.filter((product) => product.category === 'keys');
-  const accessoriesArr = products.filter(
-    (product) => product.category === 'accessories'
-  );
 
   const [perc, setPerc] = useState(true);
   const [strs, setStr] = useState(true);
@@ -44,7 +31,6 @@ const AllProducts = (props) => {
   };
 
   const updateAccessory = (evt) => {
-    evt.preventDefault;
     setAccess(evt.target.checked);
   };
 
@@ -54,10 +40,6 @@ const AllProducts = (props) => {
   if (keys === false) filteredProd = filteredArr(filteredProd, 'keys');
   if (access === false) filteredProd = filteredArr(filteredProd, 'accessories');
 
-  console.log('percussion>>>>>', perc);
-  console.log('keys>>>>', keys);
-  console.log('accessory', access);
-  console.log('strings>>>>', strs);
   return (
     <div className='all-products-container'>
       <div className='filter-div'>
