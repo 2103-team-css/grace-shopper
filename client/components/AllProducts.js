@@ -35,6 +35,7 @@ const AllProducts = (props) => {
   };
 
   let filteredProd = [...products]; //all of the prod
+  console.log(filteredArr);
   if (perc === false) filteredProd = filteredArr(filteredProd, 'percussion');
   if (strs === false) filteredProd = filteredArr(filteredProd, 'string');
   if (keys === false) filteredProd = filteredArr(filteredProd, 'keys');
