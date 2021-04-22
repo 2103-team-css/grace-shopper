@@ -8,7 +8,7 @@ router.get('/', async (req, res, next) => {
       include: {
         model: Product,
         attributes: ['name', 'price'],
-        through: { attributes: ['id', 'quantity', 'productId'] },
+        through: { model: Cart, as: 'cart', attributes: ['id', 'quantity', 'productId'] },
       },
     });
     res.json(user.products);
@@ -30,7 +30,7 @@ router.post('/', async (req, res, next) => {
       include: {
         model: Product,
         attributes: ['name', 'price'],
-        through: { attributes: ['id', 'quantity', 'productId'] },
+        through: { model: Cart, as: 'cart', attributes: ['id', 'quantity', 'productId'] },
         where: { id: productId },
       },
     });
@@ -50,7 +50,7 @@ router.put('/:cartId', async (req, res, next) => {
       include: {
         model: Product,
         attributes: ['name', 'price'],
-        through: { attributes: ['id', 'quantity', 'productId'] },
+        through: { model: Cart, as: 'cart', attributes: ['id', 'quantity', 'productId'] },
         where: { id: cartItem.productId },
       },
     });
