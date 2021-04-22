@@ -2,10 +2,12 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import AllProducts from "./components/AllProducts";
-import CreateProduct from "./components/CreateProduct";
 import Cart from "./components/Cart";
 import { Login, Signup } from "./components/AuthForm";
 import Home from "./components/Home";
+import SingleProduct from "./components/SingleProduct";
+import CreateProduct from "./components/CreateProduct";
+
 // import DropDownFilter from './components/DropDownFilter';
 import { me } from "./store";
 import EditProduct from "./components/EditProduct";
@@ -25,7 +27,8 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route path="/products" component={AllProducts} />
+            <Route exact path="/products" component={AllProducts} />
+            <Route path="/products/:id" component={SingleProduct} />
             <Route path="/admin/products" component={CreateProduct} />
             <Route path="/admin/products/:productid" component={EditProduct} />
             <Route path="/home" component={Home} />
@@ -35,7 +38,9 @@ class Routes extends Component {
         ) : (
           <Switch>
             {/* <Route path='/dropdown' component={DropDownFilter} /> */}
-            <Route path="/products" component={AllProducts} />
+
+            <Route exact path="/products" component={AllProducts} />
+            <Route path="/products/:id" component={SingleProduct} />
             <Route exact path="/" component={Login} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
