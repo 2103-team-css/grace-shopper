@@ -46,16 +46,20 @@ const Cart = () => {
                 <li>
                   <button
                     onClick={() => {
-                      dispatch(
-                        updateCartItem(
-                          userId,
-                          item.cart.id,
-                          item.cart.productId,
-                          item.cart.quantity - 1,
-                          item.price,
-                          item.name
-                        )
-                      );
+                      if (item.cart.quantity <= 1) {
+                        dispatch(deleteCartItem(userId, item.cart.id));
+                      } else {
+                        dispatch(
+                          updateCartItem(
+                            userId,
+                            item.cart.id,
+                            item.cart.productId,
+                            item.cart.quantity - 1,
+                            item.price,
+                            item.name
+                          )
+                        );
+                      }
                     }}
                   >
                     Decrease
