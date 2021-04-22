@@ -38,7 +38,15 @@ export const fetchProducts = () => {
 export const createProduct = (product, history) => {
   try {
     return async (dispatch) => {
-      const { data: created } = await axios.post("/api/products", product);
+      const { data: created } = await axios.post(
+        "/api/admin/products",
+        product,
+        {
+          headers: {
+            authorization: localStorage.getItem("token"),
+          },
+        }
+      );
       dispatch(_createProduct(created));
       history.push("/");
     };
@@ -50,7 +58,7 @@ export const createProduct = (product, history) => {
 export const updateProduct = (product, history) => {
   return async (dispatch) => {
     const { data: updated } = await axios.put(
-      `/api/product/${product.id}`,
+      `/api/admin/products/${product.id}`,
       product
     );
     dispatch(_updateProduct(updated));

@@ -1,4 +1,4 @@
-const { User } = require('./db');
+const { User } = require("./db");
 
 const isLoggedIn = async (req, res, next) => {
   try {
@@ -14,8 +14,20 @@ const isOwner = (req, res, next) => {
   if (req.user.id == req.params.userId) {
     next();
   } else {
-    next(new Error('not authorized'));
+    next(new Error("not authorized"));
   }
 };
 
-module.exports = { isLoggedIn, isOwner };
+const isAdmin = async (req, res, next) => {
+  try {
+    if (req.user.isAdmin) {
+      next();
+    } else {
+      return res.status(401).send({ msg: "Not an admin, sorry" });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { isLoggedIn, isOwner, isAdmin };
