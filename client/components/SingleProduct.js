@@ -18,8 +18,6 @@ const SingleProduct = (props) => {
     props.getOneProduct(props.match.params.id);
   }, []);
   const { oneProduct, userId } = props;
-  console.log(props);
-  console.log(oneProduct);
   return (
     <div className='single-product-container'>
       <div className='single-product-profile'>
