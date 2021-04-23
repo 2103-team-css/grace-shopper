@@ -8,6 +8,7 @@ import Home from './components/Home';
 import SingleProduct from './components/SingleProduct';
 // import DropDownFilter from './components/DropDownFilter';
 import { me } from './store';
+import CheckoutForm from './components/CheckoutForm';
 
 /**
  * COMPONENT
@@ -28,6 +29,7 @@ class Routes extends Component {
             <Route path='/products/:id' component={SingleProduct} />
             <Route path='/home' component={Home} />
             <Route path='/cart' component={Cart} />
+            <Route path='/checkout' component={CheckoutForm} />
             <Redirect to='/home' />
           </Switch>
         ) : (
@@ -40,6 +42,8 @@ class Routes extends Component {
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
             <Route path='/cart' component={Cart} />
+            <Route path='/checkout' component={CheckoutForm} />
+            
           </Switch>
         )}
       </div>
