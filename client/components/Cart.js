@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { updateCartItem, deleteCartItem, removeCart } from '../store/cart';
 
 const Cart = () => {
@@ -80,6 +81,7 @@ const Cart = () => {
           );
         })}
       </ul>
+      <Link to="/checkout">Checkout</Link>
     </div>
   );
 };
