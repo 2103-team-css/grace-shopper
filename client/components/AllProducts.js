@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../store/products';
 import { createCartItem } from '../store/cart';
+import { Link } from 'react-router-dom';
 
 const AllProducts = (props) => {
   useEffect(() => {
@@ -35,7 +36,7 @@ const AllProducts = (props) => {
   };
 
   let filteredProd = [...products]; //all of the prod
-  console.log(filteredArr);
+  console.log(props);
   if (perc === false) filteredProd = filteredArr(filteredProd, 'percussion');
   if (strs === false) filteredProd = filteredArr(filteredProd, 'string');
   if (keys === false) filteredProd = filteredArr(filteredProd, 'keys');
@@ -82,15 +83,18 @@ const AllProducts = (props) => {
       {filteredProd.map((product) => {
         return (
           <div key={product.id} className='product-container'>
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              heigt='150'
-              width='200'
-              className='product-image'
-            />
-            <h3>Name:{product.name}</h3>
+            <Link to={`/products/${product.id}`}>
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                heigt='150'
+                width='200'
+                className='product-image'
+              />
+              <h3>Name:{product.name}</h3>
+            </Link>
             <p>Price: ${product.price}</p>
+
             <button
               onClick={() => {
                 props.addToCart(
