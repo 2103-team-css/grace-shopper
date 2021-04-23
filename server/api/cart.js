@@ -1,17 +1,21 @@
 const router = require('express').Router({ mergeParams: true });
+const sequelize = require('sequelize');
 const { Cart, Product, User } = require('../db');
 
 router.get('/', async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.params.userId, {
-      attributes: [],
-      include: {
-        model: Product,
-        attributes: ['name', 'price'],
-        through: { attributes: ['id', 'quantity', 'productId'] },
-      },
+    const cart = await Cart.findAll({
+      where: { userId: req.params.userId },
+      attributes: [
+        'id',
+        'quantity',
+        'productId',
+        [sequelize.col('product.name'), 'name'],
+        [sequelize.col('product.price'), 'price'],
+      ],
+      include: { model: Product, attributes: [] },
     });
-    res.json(user.products);
+    res.json(cart);
   } catch (error) {
     next(error);
   }
@@ -20,21 +24,22 @@ router.get('/', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { productId, quantity } = req.body;
-    await Cart.create({
+    const newCartItem = await Cart.create({
       userId: req.params.userId,
       productId,
       quantity,
     });
-    const user = await User.findByPk(req.params.userId, {
-      attributes: [],
-      include: {
-        model: Product,
-        attributes: ['name', 'price'],
-        through: { attributes: ['id', 'quantity', 'productId'] },
-        where: { id: productId },
-      },
+    const returnItem = await Cart.findByPk(newCartItem.id, {
+      attributes: [
+        'id',
+        'quantity',
+        'productId',
+        [sequelize.col('product.name'), 'name'],
+        [sequelize.col('product.price'), 'price'],
+      ],
+      include: { model: Product, attributes: [] },
     });
-    res.json(user.products[0]);
+    res.json(returnItem);
   } catch (error) {
     next(error);
   }
@@ -45,16 +50,17 @@ router.put('/:cartId', async (req, res, next) => {
     const { quantity } = req.body;
     const cartItem = await Cart.findByPk(req.params.cartId);
     await cartItem.update({ quantity });
-    const user = await User.findByPk(req.params.userId, {
-      attributes: [],
-      include: {
-        model: Product,
-        attributes: ['name', 'price'],
-        through: { attributes: ['id', 'quantity', 'productId'] },
-        where: { id: cartItem.productId },
-      },
+    const returnItem = await Cart.findByPk(cartItem.id, {
+      attributes: [
+        'id',
+        'quantity',
+        'productId',
+        [sequelize.col('product.name'), 'name'],
+        [sequelize.col('product.price'), 'price'],
+      ],
+      include: { model: Product, attributes: [] },
     });
-    res.json(user.products[0]);
+    res.json(returnItem);
   } catch (error) {
     next(error);
   }

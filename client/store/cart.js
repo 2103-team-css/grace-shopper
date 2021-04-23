@@ -69,16 +69,6 @@ export const fetchCart = (userId) => {
   };
 };
 
-const ex = {
-  name: 'Accessory Product',
-  price: 781.72,
-  cart: {
-    id: 5,
-    quantity: 1,
-    productId: 16,
-  },
-};
-
 export const createCartItem = (userId, name, price, quantity, productId) => {
   return async (dispatch) => {
     try {
@@ -94,7 +84,7 @@ export const createCartItem = (userId, name, price, quantity, productId) => {
         );
         dispatch(addToCart(cartItem, false));
       } else {
-        dispatch(addToCart({ name, price, cart: { id: uuid(), quantity, productId } }, true));
+        dispatch(addToCart({ id: uuid(), quantity, productId, name, price }, true));
       }
     } catch (error) {
       console.error(error);
@@ -136,7 +126,7 @@ export const updateCartItem = (userId, cartId, productId, quantity, price, name)
         );
         dispatch(updateInCart(cartItem, false));
       } else {
-        dispatch(updateInCart({ name, price, cart: { id: cartId, quantity, productId } }, true));
+        dispatch(updateInCart({ id: cartId, quantity, productId, name, price }, true));
       }
     } catch (error) {
       console.error(error);
@@ -188,13 +178,13 @@ export default function cartReducer(state = [], action) {
       return newState;
     case REMOVE_FROM_CART:
       newState = state.filter((item) => {
-        return item.cart.id !== action.cartId;
+        return item.id !== action.cartId;
       });
       if (action.local) setLocalCart(newState);
       return newState;
     case UPDATE_IN_CART:
       newState = state.map((item) => {
-        if (item.cart.id === action.cartItem.cart.id) {
+        if (item.id === action.cartItem.id) {
           return action.cartItem;
         }
         return item;

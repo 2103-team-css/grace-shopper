@@ -147,7 +147,7 @@ function populateProducts(num) {
       category: type,
       quantity: Math.ceil(Math.random() * 10),
       description: loremipsum[rand],
-      price: (Math.random() * 1200).toFixed(2),
+      price: Math.ceil(Math.random() * 120000),
       imageUrl,
       // createdAt timestamp will autopopulate upon seeding
     };

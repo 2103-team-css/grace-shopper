@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { updateCartItem, deleteCartItem, removeCart } from '../store/cart';
 
 const Cart = () => {
@@ -20,20 +21,20 @@ const Cart = () => {
       <ul>
         {cart.map((item) => {
           return (
-            <li key={item.cart.id}>
+            <li key={item.id}>
               <ul>
                 <li>Name: {item.name}</li>
                 <li>Price: ${item.price}</li>
-                <li>Quantity: {item.cart.quantity}</li>
+                <li>Quantity: {item.quantity}</li>
                 <li>
                   <button
                     onClick={() => {
                       dispatch(
                         updateCartItem(
                           userId,
-                          item.cart.id,
-                          item.cart.productId,
-                          item.cart.quantity + 1,
+                          item.id,
+                          item.productId,
+                          item.quantity + 1,
                           item.price,
                           item.name
                         )
@@ -46,16 +47,20 @@ const Cart = () => {
                 <li>
                   <button
                     onClick={() => {
-                      dispatch(
-                        updateCartItem(
-                          userId,
-                          item.cart.id,
-                          item.cart.productId,
-                          item.cart.quantity - 1,
-                          item.price,
-                          item.name
-                        )
-                      );
+                      if (item.quantity <= 1) {
+                        dispatch(deleteCartItem(userId, item.id));
+                      } else {
+                        dispatch(
+                          updateCartItem(
+                            userId,
+                            item.id,
+                            item.productId,
+                            item.quantity - 1,
+                            item.price,
+                            item.name
+                          )
+                        );
+                      }
                     }}
                   >
                     Decrease
@@ -64,18 +69,19 @@ const Cart = () => {
                 <li>
                   <button
                     onClick={() => {
-                      dispatch(deleteCartItem(userId, item.cart.id));
+                      dispatch(deleteCartItem(userId, item.id));
                     }}
                   >
                     Remove
                   </button>
                 </li>
-                <li>Total: {item.price * item.cart.quantity}</li>
+                <li>Total: {item.price * item.quantity}</li>
               </ul>
             </li>
           );
         })}
       </ul>
+      <Link to="/checkout">Checkout</Link>
     </div>
   );
 };

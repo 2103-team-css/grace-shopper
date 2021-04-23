@@ -1,13 +1,14 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
-const Product = db.define('product', {
-  code: {
-    type: Sequelize.STRING,
-    unique: true,
+const Order = db.define('order', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
     allowNull: false,
   },
-  name: {
+  email: {
     type: Sequelize.STRING,
     allowNull: false,
   },
@@ -18,9 +19,6 @@ const Product = db.define('product', {
       min: 0,
     },
   },
-  description: {
-    type: Sequelize.TEXT,
-  },
   price: {
     type: Sequelize.INTEGER,
     allowNull: false,
@@ -28,13 +26,17 @@ const Product = db.define('product', {
       min: 0,
     },
   },
-  imageUrl: {
-    type: Sequelize.TEXT,
-    defaultValue: 'http://via.placeholder.com/320x320',
+  total: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    validate: {
+      min: 0,
+    },
   },
-  category: {
-    type: Sequelize.ENUM('percussion', 'string', 'keys', 'accessories'),
+  orderCode: {
+    type: Sequelize.STRING,
+    allowNull: false,
   },
 });
 
-module.exports = Product;
+module.exports = Order;
