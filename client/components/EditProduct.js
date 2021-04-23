@@ -20,11 +20,11 @@ class EditProduct extends Component {
   }
 
   componentDidMount() {
-    this.props.updateProduct(this.props.match.productid);
+    this.props.updateProduct(this.props.match.id);
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.product.id && this.props.productid) {
+    if (!prevProps.product.id && this.props.id) {
       this.setState({
         code: this.props.product.code,
         name: this.props.product.name,
@@ -96,7 +96,7 @@ class EditProduct extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  product: state,
+  product: state.oneProduct,
 });
 
 const mapDispatchToProps = (dispatch, { history }) => ({

@@ -7,10 +7,10 @@ import { Login, Signup } from "./components/AuthForm";
 import Home from "./components/Home";
 import SingleProduct from "./components/SingleProduct";
 import CreateProduct from "./components/CreateProduct";
-
 // import DropDownFilter from './components/DropDownFilter';
 import { me } from "./store";
 import EditProduct from "./components/EditProduct";
+import EditUser from "./components/EditUser";
 
 /**
  * COMPONENT
@@ -29,8 +29,9 @@ class Routes extends Component {
           <Switch>
             <Route exact path="/products" component={AllProducts} />
             <Route path="/products/:id" component={SingleProduct} />
-            <Route path="/admin/products" component={CreateProduct} />
-            <Route path="/admin/products/:productid" component={EditProduct} />
+            <Route exact path="/admin/products" component={CreateProduct} />
+            <Route exact path="/admin/products/:id" component={EditProduct} />
+            <Route exact path="/admin/users/:id" component={EditUser} />
             <Route path="/home" component={Home} />
             <Route path="/cart" component={Cart} />
             <Redirect to="/home" />
@@ -38,7 +39,6 @@ class Routes extends Component {
         ) : (
           <Switch>
             {/* <Route path='/dropdown' component={DropDownFilter} /> */}
-
             <Route exact path="/products" component={AllProducts} />
             <Route path="/products/:id" component={SingleProduct} />
             <Route exact path="/" component={Login} />

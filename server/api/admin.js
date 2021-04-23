@@ -14,15 +14,6 @@ router.get("/users"),
 router.post("/products", async (req, res, next) => {
   try {
     const newProduct = await Product.create(req.body);
-    // product.code = req.body.code;
-    // product.name = req.body.name;
-    // product.quantity = req.body.quantity;
-    // product.description = req.body.description;
-    // product.price = req.body.price;
-    // product.category = req.body.category;
-    // product.imageUrl = req.body.imageUrl;
-
-    // const add = await Product.add(product);
     res.send(newProduct);
   } catch (err) {
     next(err);
@@ -40,15 +31,33 @@ router.delete("/products/:id", async (req, res, next) => {
 
 router.put("/products/:id", async (req, res, next) => {
   try {
-    const update = await Product.findbyPk(req.params.id);
+    console.log("req.params", req.params);
+    console.log("req.body --->", req.body);
+    const update = await Product.findByPk(req.params.id);
+    console.log("update");
     await update.update({
       code: req.body.code,
       name: req.body.name,
-      quantity: req.body.quantity,
+      quantity: Number(req.body.quantity),
       description: req.body.description,
-      price: req.body.price,
+      price: Number(req.body.price),
       category: req.body.category,
       imageUrl: req.body.imageUrl,
+    });
+    res.send(update);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/users/:id", async (req, res, next) => {
+  try {
+    const update = await User.findByPk(req.params.id);
+    await update.update({
+      email: req.body.code,
+      password: req.body.password,
+      isAdmin: req.body.isAdmin,
+      fullName: req.body.fullName,
     });
     res.send(update);
   } catch (err) {

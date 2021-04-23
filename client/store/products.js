@@ -59,7 +59,12 @@ export const updateProduct = (product, history) => {
   return async (dispatch) => {
     const { data: updated } = await axios.put(
       `/api/admin/products/${product.id}`,
-      product
+      product,
+      {
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+      }
     );
     dispatch(_updateProduct(updated));
     history.push("/");
