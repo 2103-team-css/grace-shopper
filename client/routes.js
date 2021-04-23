@@ -11,6 +11,7 @@ import CreateProduct from "./components/CreateProduct";
 import { me } from "./store";
 import EditProduct from "./components/EditProduct";
 import EditUser from "./components/EditUser";
+import AllUsers from "./components/AllUsers";
 
 /**
  * COMPONENT
@@ -27,10 +28,11 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route exact path="/products" component={AllProducts} />
-            <Route path="/products/:id" component={SingleProduct} />
+            <Route path="/products" component={AllProducts} />
+            <Route exact path="/products/:id" component={SingleProduct} />
             <Route exact path="/admin/products" component={CreateProduct} />
             <Route exact path="/admin/products/:id" component={EditProduct} />
+            <Route exact path="/admin/users" component={AllUsers} />
             <Route exact path="/admin/users/:id" component={EditUser} />
             <Route path="/home" component={Home} />
             <Route path="/cart" component={Cart} />
@@ -39,6 +41,7 @@ class Routes extends Component {
         ) : (
           <Switch>
             {/* <Route path='/dropdown' component={DropDownFilter} /> */}
+
             <Route exact path="/products" component={AllProducts} />
             <Route path="/products/:id" component={SingleProduct} />
             <Route exact path="/" component={Login} />
