@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 import AllProducts from './components/AllProducts';
@@ -6,7 +6,6 @@ import Cart from './components/Cart';
 import { Login, Signup } from './components/AuthForm';
 import Home from './components/Home';
 import SingleProduct from './components/SingleProduct';
-// import DropDownFilter from './components/DropDownFilter';
 import { me } from './store';
 import CheckoutForm from './components/CheckoutForm';
 import OrderHistory from './components/OrderHistory';
@@ -32,24 +31,20 @@ class Routes extends Component {
             <Route path="/home" component={Home} />
             <Route path="/cart" component={Cart} />
             <Route path="/orderHistory" component={OrderHistory} />
-            <Route path='/checkout' component={CheckoutForm} />
-            <Route path='/confirmation' component={Confirmation} />
+            <Route path="/checkout" component={CheckoutForm} />
+            <Route path="/confirmation" component={Confirmation} />
             <Redirect to="/home" />
           </Switch>
         ) : (
           <Switch>
-            {/* <Route path='/dropdown' component={DropDownFilter} /> */}
-
-            <Route exact path='/products' component={AllProducts} />
-            <Route path='/products/:id' component={SingleProduct} />
-            <Route exact path='/' component={Login} />
-            <Route path='/login' component={Login} />
-            <Route path='/signup' component={Signup} />
-            <Route path='/cart' component={Cart} />
-            <Route path='/checkout' component={CheckoutForm} />
-            <Route path='/confirmation' component={Confirmation} />
-
-            
+            <Route exact path="/products" component={AllProducts} />
+            <Route path="/products/:id" component={SingleProduct} />
+            <Route exact path="/" component={Login} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/cart" component={Cart} />
+            <Route path="/checkout" component={CheckoutForm} />
+            <Route path="/confirmation" component={Confirmation} />
           </Switch>
         )}
       </div>
