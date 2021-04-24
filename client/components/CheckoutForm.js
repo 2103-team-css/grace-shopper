@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import {connect} from 'react-redux'
 import { withFormik, Form, Field, useFormikContext } from 'formik';
 import * as Yup from 'yup';
-import { submitCheckout } from '../store/cart'
+import { submitCheckout } from '../store/orderHistory';
 import auth from '../store/auth';
 import { TextField, Button, Select } from "@material-ui/core";
 
@@ -93,7 +94,6 @@ const CheckoutForm = ( { values, errors, touched, isSubmitting } ) => {
 
 const CheckoutApp = withFormik({
     mapPropsToValues( { id, fullName, email, cart } ) {
-        console.log('cart>>>', cart);
         console.log('fullName>>>', fullName);
         const fieldValues = {
             id,
@@ -101,12 +101,6 @@ const CheckoutApp = withFormik({
             email: email || '',
             cart,
             paymentMethod: '',
-            // billing: {
-            //     street: '',
-            //     city: '',
-            //     state: '',
-            //     zip: '',
-            // }
                 street: '',
                 city: '',
                 state: '',
@@ -131,13 +125,20 @@ const CheckoutApp = withFormik({
         .required('Must select a payment method.'),
     } ),
     handleSubmit(values, { props, resetForm, setSubmitting } )  {
-        const payload = { ...values };
-        // can I restructure the payload here??
-        console.log('payload>>>', payload);
+        const shippingObj = {
+            street: values.street,
+            city: values.city,
+            state: values.state,
+            zip: values.zip
+        };
+        const paymentObj = {
+            email: values.email,
+            method: values.paymentMethod,
+        };
         console.log("Submit hit!")
         setSubmitting(true);
         // use props.dispatch to call thunk for post route './api/checkout
-        props.dispatch(submitCheckout(payload));
+        props.dispatch(submitCheckout(values.id, values.cart, paymentObj, shippingObj, props.history));
         // clear cart is done inside the above thunk, dispatched to cart reducer
         resetForm();
     },
@@ -152,6 +153,7 @@ const mapState = state => {
         email: state.auth.email,
         cart: state.cart,
     }
+
 }
 
 export default connect(mapState)(CheckoutApp);
