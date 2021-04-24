@@ -5,9 +5,9 @@ const db = require('./db');
 const User = require('./models/user');
 const Product = require('./models/product');
 const Cart = require('./models/cart');
-const Order = require('./models/order');
+const { Order, OrderProduct } = require('./models/order');
 
-//Define super many to many relationships
+//Define super many to many relationship
 User.belongsToMany(Product, { through: Cart, foreignKey: 'userId' });
 Product.belongsToMany(User, { through: Cart, foreignKey: 'productId' });
 User.hasMany(Cart);
@@ -15,12 +15,18 @@ Cart.belongsTo(User);
 Product.hasMany(Cart);
 Cart.belongsTo(Product);
 
-User.belongsToMany(Product, { through: { model: Order, unique: false }, foreignKey: 'userId' });
-Product.belongsToMany(User, { through: { model: Order, unique: false }, foreignKey: 'productId' });
 User.hasMany(Order);
 Order.belongsTo(User);
-Product.hasMany(Order);
-Order.belongsTo(Product);
+
+Order.belongsToMany(Product, {
+  through: OrderProduct,
+  foreignKey: 'orderId',
+});
+Product.belongsToMany(Order, {
+  through: OrderProduct,
+  foreignKey: 'productId',
+  onDelete: 'SET NULL',
+});
 
 module.exports = {
   db,
@@ -28,4 +34,5 @@ module.exports = {
   Product,
   Cart,
   Order,
+  OrderProduct,
 };
