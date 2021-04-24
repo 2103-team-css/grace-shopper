@@ -15,8 +15,8 @@ Cart.belongsTo(User);
 Product.hasMany(Cart);
 Cart.belongsTo(Product);
 
-User.belongsToMany(Product, { through: Order, foreignKey: 'userId' });
-Product.belongsToMany(User, { through: Order, foreignKey: 'productId' });
+User.belongsToMany(Product, { through: { model: Order, unique: false }, foreignKey: 'userId' });
+Product.belongsToMany(User, { through: { model: Order, unique: false }, foreignKey: 'productId' });
 User.hasMany(Order);
 Order.belongsTo(User);
 Product.hasMany(Order);
