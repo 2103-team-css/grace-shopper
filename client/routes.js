@@ -8,7 +8,9 @@ import Home from './components/Home';
 import SingleProduct from './components/SingleProduct';
 // import DropDownFilter from './components/DropDownFilter';
 import { me } from './store';
+import CheckoutForm from './components/CheckoutForm';
 import OrderHistory from './components/OrderHistory';
+import Confirmation from './components/Confirmation';
 
 /**
  * COMPONENT
@@ -30,18 +32,24 @@ class Routes extends Component {
             <Route path="/home" component={Home} />
             <Route path="/cart" component={Cart} />
             <Route path="/orderHistory" component={OrderHistory} />
+            <Route path='/checkout' component={CheckoutForm} />
+            <Route path='/confirmation' component={Confirmation} />
             <Redirect to="/home" />
           </Switch>
         ) : (
           <Switch>
             {/* <Route path='/dropdown' component={DropDownFilter} /> */}
 
-            <Route exact path="/products" component={AllProducts} />
-            <Route path="/products/:id" component={SingleProduct} />
-            <Route exact path="/" component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/cart" component={Cart} />
+            <Route exact path='/products' component={AllProducts} />
+            <Route path='/products/:id' component={SingleProduct} />
+            <Route exact path='/' component={Login} />
+            <Route path='/login' component={Login} />
+            <Route path='/signup' component={Signup} />
+            <Route path='/cart' component={Cart} />
+            <Route path='/checkout' component={CheckoutForm} />
+            <Route path='/confirmation' component={Confirmation} />
+
+            
           </Switch>
         )}
       </div>
