@@ -12,6 +12,19 @@ const Order = db.define('order', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  orderCode: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+});
+
+const OrderProduct = db.define('orderProduct', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
   quantity: {
     type: Sequelize.INTEGER,
     allowNull: false,
@@ -33,10 +46,6 @@ const Order = db.define('order', {
       min: 0,
     },
   },
-  orderCode: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
 });
 
-module.exports = Order;
+module.exports = { Order, OrderProduct };

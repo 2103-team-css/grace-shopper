@@ -6,36 +6,21 @@ router.get('/', async (req, res, next) => {
   try {
     const orders = await Order.findAll({
       where: { userId: req.user.id },
-      attributes: [
-        'id',
-        'quantity',
-        'price',
-        'total',
-        'orderCode',
-        'createdAt',
-        'productId',
-        [sequelize.col('product.name'), 'name'],
-      ],
-      include: { model: Product, attributes: [] },
+      attributes: ['id', 'orderCode', 'createdAt'],
+      include: {
+        model: Product,
+        attributes: [
+          'id',
+          'name',
+          [sequelize.literal('"products->orderProduct".price'), 'price'],
+          [sequelize.literal('"products->orderProduct".quantity'), 'quantity'],
+          [sequelize.literal('"products->orderProduct".total'), 'total'],
+        ],
+        through: { attributes: [] },
+      },
       order: [['createdAt', 'DESC']],
     });
-
-    const groupedOrders = orders.reduce((groups, item) => {
-      if (!groups[item.orderCode]) {
-        groups[item.orderCode] = [item];
-      } else {
-        groups[item.orderCode].push(item);
-      }
-      return groups;
-    }, {});
-
-    const result = Object.keys(groupedOrders).map((orderCode) => {
-      return {
-        orderCode,
-        products: groupedOrders[orderCode],
-      };
-    });
-    res.json(result);
+    res.json(orders);
   } catch (error) {
     next(error);
   }

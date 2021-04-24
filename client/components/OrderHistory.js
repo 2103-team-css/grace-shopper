@@ -10,9 +10,9 @@ const OrderHistory = () => {
       Order History:
       {orderHistory.map((order) => {
         return (
-          <div key={order.orderCode}>
+          <div key={order.id}>
             <h3>Order #{order.orderCode}</h3>
-            <h4>Date: {order.products[0].createdAt}</h4>
+            <h4>Date: {order.createdAt}</h4>
             <ul>
               {order.products.map((item) => {
                 return (
