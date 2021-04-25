@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchProducts } from '../store/products';
 import { createCartItem } from '../store/cart';
 import { Link } from 'react-router-dom';
+import Pagination from './Pagination';
 
 const AllProducts = (props) => {
   useEffect(() => {
@@ -14,6 +15,9 @@ const AllProducts = (props) => {
   const [strs, setStr] = useState(true);
   const [keys, setKeys] = useState(true);
   const [access, setAccess] = useState(true);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(8);
 
   const filteredArr = (products, category) => {
     return products.filter((product) => product.category !== category);
@@ -41,6 +45,13 @@ const AllProducts = (props) => {
   if (strs === false) filteredProd = filteredArr(filteredProd, 'string');
   if (keys === false) filteredProd = filteredArr(filteredProd, 'keys');
   if (access === false) filteredProd = filteredArr(filteredProd, 'accessories');
+
+  //pagination:
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProd.slice(indexOfFirstProduct, indexOfLastProduct);
+  //page-changer:
+  const paginate = (pageNum) => setCurrentPage(pageNum);
 
   return (
     <div className='all-products-container'>
@@ -80,7 +91,7 @@ const AllProducts = (props) => {
           onChange={updateAccessory}
         />
       </div>
-      {filteredProd.map((product) => {
+      {currentProducts.map((product) => {
         return (
           <div key={product.id} className='product-container'>
             <Link to={`/products/${product.id}`}>
@@ -113,6 +124,11 @@ const AllProducts = (props) => {
           </div>
         );
       })}
+      <Pagination 
+      productsPerPage={productsPerPage} 
+      totalProducts={filteredProd.length} 
+      paginate={paginate}
+      />
     </div>
   );
 };

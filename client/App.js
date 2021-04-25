@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart } from './store/cart';
 import Navbar from './components/Navbar';
-import Routes from './routes';
+import Routes from './Routes';
+import { fetchHistory } from './store/orderHistory';
 
 const App = () => {
   const userId = useSelector((state) => state.auth.id);
@@ -10,6 +11,12 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchCart(userId));
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchHistory(userId));
+    }
   }, [userId]);
 
   return (

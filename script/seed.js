@@ -63,7 +63,7 @@ const stringImages = [
   'https://www.amazon.com/Daisy-Rock-Special-Velvet-Electric/dp/B001SASQ2A',
   'https://pixabay.com/en/electric-guitar-rock-guitar-1669233/',
   'https://www.walmart.com/ip/Gold-Classic-Rock-N-Roll-6-Stringed-Acoustic-Guitar-Toy-Guitar-Musical-Instrument-for-Kids-Includes-Guitar-Pick-Extra-Guitar-String/426828935',
-  'http://www.engadget.com/2008/09/11/rock-band-2-standalone-instruments-set-to-ship-next-week/',
+  'https://www.richtonemusic.co.uk/product/--classic-rock-l-electric-guitar/',
   'https://www.amazon.com/Daisy-Rock-WildWood-Artist-Acoustic-Electric/dp/B001SASQ0C',
   'https://www.wired.com/wp-content/uploads/images_blogs/gamelife/2010/10/mustang.png',
   'https://i.pinimg.com/originals/74/74/67/747467b691390ba54a1e4c666bd857ed.jpg',
@@ -147,7 +147,7 @@ function populateProducts(num) {
       category: type,
       quantity: Math.ceil(Math.random() * 10),
       description: loremipsum[rand],
-      price: (Math.random() * 1200).toFixed(2),
+      price: Math.ceil(Math.random() * 120000),
       imageUrl,
       // createdAt timestamp will autopopulate upon seeding
     };

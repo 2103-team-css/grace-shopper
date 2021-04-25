@@ -19,3 +19,13 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+}
+
+.page-item {
+  list-style-type: none;
+  border: solid, black, 1px;
+}

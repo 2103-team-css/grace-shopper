@@ -1,5 +1,9 @@
 {
   "name": "fs-app-template",
+  "engines": {
+    "node": "14.16.0",
+    "npm": "7.6.3"
+  },
   "version": "2.0.0",
   "description": "Some boilerplate code to get you started - get shakin'!",
   "main": "index.js",
@@ -20,15 +24,19 @@
   "author": "Fullstack Academy of Code",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "compression": "^1.7.3",
     "express": "^4.16.4",
+    "formik": "^2.2.6",
     "history": "^4.9.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "pg": "^8.5.1",
-    "sequelize": "^6.6.2"
+    "sequelize": "^6.6.2",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
