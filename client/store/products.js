@@ -57,7 +57,6 @@ export const createProduct = (product, history) => {
 
 export const updateProduct = (product, history) => {
   return async (dispatch) => {
-    console.log("product ---> ", product);
     const { data: updated } = await axios.put(
       `/api/admin/products/${product.id}`,
       product,

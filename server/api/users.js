@@ -16,15 +16,6 @@ module.exports = router;
 //   }
 // });
 
-router.get("/", async (req, res, next) => {
-  try {
-    console.log("is this working");
-    const user = await User.findAll();
-    res.send(user);
-  } catch (err) {
-    next(err);
-  }
-});
 
 // router.get("/", async (req, res, next) => {
 //   try {
