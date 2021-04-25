@@ -7,7 +7,8 @@ import { Login, Signup } from './components/AuthForm';
 import Home from './components/Home';
 import SingleProduct from './components/SingleProduct';
 import { me } from './store';
-import CheckoutForm from './components/CheckoutForm';
+// import CheckoutForm from './components/CheckoutForm';
+import Checkout from './components/Checkout';
 import OrderHistory from './components/OrderHistory';
 import Confirmation from './components/Confirmation';
 
@@ -31,7 +32,8 @@ class Routes extends Component {
             <Route path="/home" component={Home} />
             <Route path="/cart" component={Cart} />
             <Route path="/orderHistory" component={OrderHistory} />
-            <Route path="/checkout" component={CheckoutForm} />
+            {/* <Route path="/checkout" component={CheckoutForm} /> */}
+            <Route path="/checkout" component={Checkout} />
             <Route path="/confirmation" component={Confirmation} />
             <Redirect to="/home" />
           </Switch>
@@ -43,7 +45,8 @@ class Routes extends Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route path="/cart" component={Cart} />
-            <Route path="/checkout" component={CheckoutForm} />
+            {/* <Route path="/checkout" component={CheckoutForm} /> */}
+            <Route path="/checkout" component={Checkout} />
             <Route path="/confirmation" component={Confirmation} />
           </Switch>
         )}
