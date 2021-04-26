@@ -13,7 +13,7 @@ class CreateProduct extends Component {
       description: "",
       price: 0,
       imageUrl: "",
-      category: "percussion",
+      category: "",
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -77,6 +77,33 @@ class CreateProduct extends Component {
           name="description"
           onChange={handleChange}
           value={description}
+        />
+
+        <label htmlFor="price">Price: </label>
+        <input
+          type="float"
+          id="price"
+          name="price"
+          onChange={handleChange}
+          value={price}
+        />
+
+        <label htmlFor="imageUrl">ImageUrl: </label>
+        <input
+          type="text"
+          id="imageUrl"
+          name="imageUrl"
+          onChange={this.handleChange}
+          value={imageUrl}
+        />
+
+        <label htmlFor="category">Category: </label>
+        <input
+          type="text"
+          id="category"
+          name="category"
+          onChange={this.handleChange}
+          value={category}
         />
 
         <button type="submit">Submit</button>
