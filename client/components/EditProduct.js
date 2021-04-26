@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { updateProduct } from "../store/products";
+import { updateProduct, deleteProduct } from "../store/products";
 import { connect } from "react-redux";
 
 class EditProduct extends Component {
@@ -20,11 +20,19 @@ class EditProduct extends Component {
   }
 
   componentDidMount() {
-    this.props.updateProduct(this.props.match.productid);
+    this.setState({
+      code: this.props.product.code,
+      name: this.props.product.name,
+      quantity: this.props.product.quantity,
+      imageUrl: this.props.product.imageUrl,
+      description: this.props.product.description,
+      price: this.props.product.price,
+      category: this.props.product.category,
+    });
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.product.id && this.props.productid) {
+    if (!prevProps.product.id && this.props.id) {
       this.setState({
         code: this.props.product.code,
         name: this.props.product.name,
@@ -45,7 +53,10 @@ class EditProduct extends Component {
 
   handleSubmit(evt) {
     evt.preventDefault();
-    this.props.updateProduct({ ...this.props.product, ...this.state });
+    this.props.updateProduct(
+      { ...this.props.product, ...this.state },
+      this.props.match.params.id
+    );
   }
 
   render() {
@@ -89,6 +100,12 @@ class EditProduct extends Component {
           <input name="category" onChange={handleChange} value={category} />
 
           <button type="submit">Submit</button>
+          {/* <button
+            className="remove"
+            onClick={() => this.props.deleteProduct(this.props.product)}
+          >
+            X
+          </button> */}
         </form>
       </div>
     );
@@ -96,11 +113,11 @@ class EditProduct extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  product: state,
+  product: state.oneProduct,
 });
 
 const mapDispatchToProps = (dispatch, { history }) => ({
-  updateProduct: (product) => dispatch(updateProduct(product, history)),
+  updateProduct: (product, id) => dispatch(updateProduct(product, history, id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProduct);

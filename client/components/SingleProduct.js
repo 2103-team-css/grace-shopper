@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { fetchOneProduct } from '../store/singleProduct';
-import { createCartItem } from '../store/cart';
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { fetchOneProduct } from "../store/singleProduct";
+import { deleteProduct } from "../store/products";
+import { createCartItem } from "../store/cart";
+import { Link } from "react-router-dom";
 
 import {
   Grid,
@@ -43,7 +45,7 @@ const SingleProduct = (props) => {
     props.getOneProduct(props.match.params.id);
   }, []);
 
-  const { oneProduct, userId } = props;
+  const { oneProduct, userId, isAdmin } = props;
 
   return (
     <Container>
@@ -113,6 +115,18 @@ const SingleProduct = (props) => {
           </Card>
         </Grid>
       </Grid>
+      {isAdmin && (
+          <>
+            {" "}
+            <button
+              className="remove"
+              onClick={() => deleteProduct(oneProduct.id)}
+            >
+              Delete
+            </button>
+            <Link to={`/admin/products/${oneProduct.id}`}> Edit Product: </Link>
+          </>
+        )}
     </Container>
   );
 };
@@ -121,14 +135,16 @@ const mapState = (state) => {
   return {
     oneProduct: state.oneProduct,
     userId: state.auth.id,
+    isAdmin: state.auth.isAdmin,
   };
 };
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = (dispatch, { history }) => {
   return {
     getOneProduct: (id) => dispatch(fetchOneProduct(id)),
     addToCart: (userId, name, price, quantity, productId) =>
       dispatch(createCartItem(userId, name, price, quantity, productId)),
+    deleteProduct: (id) => dispatch(deleteProduct(id, history)),
   };
 };
 

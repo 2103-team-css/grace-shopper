@@ -1,5 +1,10 @@
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
+import { toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+
+
+toast.configure();
 
 //action types
 const SET_CART = 'SET_CART';
@@ -82,6 +87,11 @@ export const createCartItem = (userId, name, price, quantity, productId) => {
             },
           }
         );
+        console.log('cartItem>>>', cartItem);
+        if(cartItem.id) {
+          console.log('toast add to cart block hit!');
+          toast(`${cartItem.name} added to your cart!`, { type: 'success' } );
+        }
         dispatch(addToCart(cartItem, false));
       } else {
         dispatch(addToCart({ id: uuid(), quantity, productId, name, price }, true));
@@ -101,6 +111,10 @@ export const deleteCartItem = (userId, cartId) => {
             authorization: localStorage.getItem('token'),
           },
         });
+        if(cartItem.id) {
+          console.log('toast remove from cart block hit!');
+          toast(`${cartItem.name} removed from your cart!`, { type: 'success' } );
+        }
         dispatch(removeFromCart(cartItem.id, false));
       } else {
         dispatch(removeFromCart(cartId, true));

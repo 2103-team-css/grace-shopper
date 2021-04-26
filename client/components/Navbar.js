@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Navbar = ({ handleClick, isLoggedIn }) => {
+const Navbar = ({ handleClick, isLoggedIn, isAdmin }) => {
   const classes = useStyles();
   return (
     <AppBar position="static" className={classes.navbar}>
@@ -38,6 +38,12 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
             <Button color="inherit" component={RouterLink} to="/orderHistory">
               Order History
             </Button>
+            {isAdmin && (
+              <>
+                <RouterLink to="/admin/products"> Add Product</RouterLink>
+                <RouterLink to="/admin/users"> All Users</RouterLink>
+              </>
+            )}
           </React.Fragment>
         ) : (
           <React.Fragment>
@@ -61,6 +67,7 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.auth.id,
+    isAdmin: state.auth.isAdmin,
   };
 };
 

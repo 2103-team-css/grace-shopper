@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { removeCart } from './cart';
+import axios from "axios";
 
 //action types
 export const SET_HISTORY = 'SET_HISTORY';
@@ -15,6 +14,7 @@ const setHistory = (history) => {
 //thunk
 
 export const fetchHistory = (userId) => {
+  console.log('fetch history block hit!');
   return async (dispatch) => {
     const { data: history } = await axios.get(`/api/orders/${userId}`, {
       headers: {
@@ -22,51 +22,6 @@ export const fetchHistory = (userId) => {
       },
     });
     dispatch(setHistory(history));
-  };
-};
-
-export const submitCheckout = (userId, sentCart, payment, shipping, history) => {
-  return async (dispatch) => {
-    try {
-      let response;
-      if (userId) {
-        response = await axios.post(
-          `/api/checkout/${userId}`,
-          {
-            cart: sentCart,
-            payment,
-            shipping,
-          },
-          {
-            headers: {
-              authorization: localStorage.getItem('token'),
-            },
-          }
-        );
-      } else {
-        response = await axios.post(`/api/checkout/guest`, {
-          cart: sentCart,
-          payment,
-          shipping,
-        });
-      }
-      const { cart, orderCode, total } = response.data;
-      dispatch(removeCart(userId));
-      if (userId) {
-        dispatch(fetchHistory(userId));
-      }
-      history.push('/confirmation', {
-        successful: true,
-        cart: cart,
-        orderCode: orderCode,
-        total: total,
-      });
-    } catch (error) {
-      console.log(error);
-      history.push('/confirmation', {
-        successful: false,
-      });
-    }
   };
 };
 
