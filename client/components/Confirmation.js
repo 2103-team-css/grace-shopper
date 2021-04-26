@@ -1,11 +1,11 @@
-import React from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import React from 'react';
+import { useLocation, Redirect, Link } from 'react-router-dom';
 
 const Confirmation = () => {
-  const history = useHistory();
   const location = useLocation();
+
   if (!location.state) {
-    history.push("/");
+    return <Redirect to="/" />;
   }
 
   const { successful, cart, orderCode, total } = location.state;
@@ -20,20 +20,20 @@ const Confirmation = () => {
               return (
                 <li key={item.id}>
                   <ul>
-                    <li>Name: {item.name}</li>
-                    <li>Price: ${item.price}</li>
+                    <Link to={`/products/${item.productId}`}>Name: {item.name}</Link>
+                    <li>Price: ${item.price / 100}</li>
                     <li>Quantity: {item.quantity}</li>
-                    <li>Total: {item.price * item.quantity}</li>
+                    <li>Total: ${(item.price * item.quantity) / 100}</li>
                   </ul>
                 </li>
               );
             })}
           </ul>
-          <p>Total: {total}</p>
+          <p>Total: ${total / 100}</p>
         </div>
       ) : (
         <div>
-            <p>Your order could not be processed at the moment. Please try again later.</p>
+          <p>Your order could not be processed at the moment. Please try again later.</p>
         </div>
       )}
     </div>

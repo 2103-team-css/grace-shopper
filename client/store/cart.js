@@ -111,7 +111,7 @@ export const deleteCartItem = (userId, cartId) => {
   };
 };
 
-export const updateCartItem = (userId, cartId, productId, quantity, price, name) => {
+export const updateCartItem = ({ userId, cartId, productId, quantity, price, name }) => {
   return async (dispatch) => {
     try {
       if (userId) {
@@ -154,7 +154,7 @@ export const removeCart = (userId) => {
 };
 
 const existsDuplicate = (cart, newItem) => {
-  return cart.some((item) => item.cart.productId === newItem.cart.productId);
+  return cart.some((item) => item.productId === newItem.productId);
 };
 
 const setLocalCart = (cart) => {

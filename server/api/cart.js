@@ -1,6 +1,6 @@
 const router = require('express').Router({ mergeParams: true });
 const sequelize = require('sequelize');
-const { Cart, Product, User } = require('../db');
+const { Cart, Product } = require('../db');
 
 router.get('/', async (req, res, next) => {
   try {

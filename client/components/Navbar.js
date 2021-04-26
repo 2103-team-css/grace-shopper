@@ -1,36 +1,59 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { logout } from '../store';
 
-const Navbar = ({ handleClick, isLoggedIn }) => (
-  <div>
-    <h1>FS-App-Template</h1>
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <Link to="/products">Products</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-          <Link to="/cart">Cart</Link>
-          <Link to="/orderHistory">Order History</Link>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/products">Products</Link>
-          <Link to="/cart">Cart</Link>
-        </div>
-      )}
-    </nav>
-    <hr />
-  </div>
-);
+import { AppBar, Toolbar, Typography, Button, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles(() => ({
+  navbar: {
+    backgroundColor: '#333333',
+  },
+  title: {
+    textTransform: 'none',
+    justifyContent: 'flex-start',
+  },
+}));
+
+const Navbar = ({ handleClick, isLoggedIn }) => {
+  const classes = useStyles();
+  return (
+    <AppBar position="static" className={classes.navbar}>
+      <Toolbar>
+        <Button color="inherit" className={classes.title} component={RouterLink} to="/">
+          <Typography variant="h6">Grace Rocker</Typography>
+        </Button>
+        <Button color="inherit" component={RouterLink} to="/products">
+          Products
+        </Button>
+        <Button color="inherit" component={RouterLink} to="/cart">
+          Cart
+        </Button>
+        {isLoggedIn ? (
+          <React.Fragment>
+            {/* The navbar will show these links after you log in */}
+            <Button color="inherit" onClick={handleClick}>
+              Logout
+            </Button>
+            <Button color="inherit" component={RouterLink} to="/orderHistory">
+              Order History
+            </Button>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            {/* The navbar will show these links before you log in */}
+            <Button color="inherit" component={RouterLink} to="/login">
+              Login
+            </Button>
+            <Button color="inherit" component={RouterLink} to="/signup">
+              Sign Up
+            </Button>
+          </React.Fragment>
+        )}
+      </Toolbar>
+    </AppBar>
+  );
+};
 
 /**
  * CONTAINER

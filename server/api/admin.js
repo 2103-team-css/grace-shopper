@@ -1,32 +1,8 @@
-const router = require("express").Router();
-const { Product, User } = require("../db");
+const router = require('express').Router();
+const { Product, User } = require('../db');
 module.exports = router;
 
-const isLoggedIn = async (req, res, next) => {
-  try {
-    const user = await User.findByToken(req.headers.authorization);
-    req.user = user;
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
-const isAdmin = async (req, res, next) => {
-  try {
-    if (req.user.isAdmin) {
-      next();
-    } else {
-      return res.status(401).send({ msg: "Not an admin, sorry" });
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-
-router.get("/admin/users"),
-  isloggedin,
-  isAdmin,
+router.get('/users'),
   async (req, res, next) => {
     try {
       const user = await User.findAll();
@@ -35,7 +11,8 @@ router.get("/admin/users"),
       next(err);
     }
   };
-router.post("/admin/products", isloggedin, isAdmin, async (req, res, next) => {
+
+router.post('/products', async (req, res, next) => {
   try {
     const product = new Product();
     product.code = req.body.code;
@@ -53,39 +30,30 @@ router.post("/admin/products", isloggedin, isAdmin, async (req, res, next) => {
   }
 });
 
-router.delete(
-  "/admin/products/:id",
-  isloggedin,
-  isAdmin,
-  async (req, res, next) => {
-    try {
-      const destroy = await Product.destroy(req.params.id);
-      res.send(destroy);
-    } catch (err) {
-      next(err);
-    }
+router.delete('/products/:id', async (req, res, next) => {
+  try {
+    const product = await Product.findByPk(req.params.id);
+    await product.destroy();
+    res.send(product);
+  } catch (err) {
+    next(err);
   }
-);
+});
 
-router.put(
-  "/admin/products/:id",
-  isloggedin,
-  isAdmin,
-  async (req, res, next) => {
-    try {
-      const update = await Product.findbyPk(req.params.id);
-      await update.update({
-        code: req.body.code,
-        name: req.body.name,
-        quantity: req.body.quantity,
-        description: req.body.description,
-        price: req.body.price,
-        category: req.body.category,
-        imageUrl: req.body.imageUrl,
-      });
-      res.send(update);
-    } catch (err) {
-      next(err);
-    }
+router.put('/products/:id', async (req, res, next) => {
+  try {
+    const update = await Product.findbyPk(req.params.id);
+    await update.update({
+      code: req.body.code,
+      name: req.body.name,
+      quantity: req.body.quantity,
+      description: req.body.description,
+      price: req.body.price,
+      category: req.body.category,
+      imageUrl: req.body.imageUrl,
+    });
+    res.send(update);
+  } catch (err) {
+    next(err);
   }
-);
+});

@@ -18,10 +18,10 @@ const OrderHistory = () => {
                 return (
                   <li key={item.id}>
                     <ul>
-                      <li>Name: {item.name}</li>
-                      <li>Price: ${item.price}</li>
+                      <Link to={`/products/${item.productId}`}>Name: {item.name}</Link>
+                      <li>Price: ${item.price / 100}</li>
                       <li>Quantity: {item.quantity}</li>
-                      <li>Total: ${item.total}</li>
+                      <li>Total: ${item.total / 100}</li>
                     </ul>
                   </li>
                 );

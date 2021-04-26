@@ -23,31 +23,18 @@ class Routes extends Component {
     const { isLoggedIn } = this.props;
 
     return (
-      <div>
-        {isLoggedIn ? (
-          <Switch>
-            <Route exact path="/products" component={AllProducts} />
-            <Route path="/products/:id" component={SingleProduct} />
-            <Route path="/home" component={Home} />
-            <Route path="/cart" component={Cart} />
-            <Route path="/orderHistory" component={OrderHistory} />
-            <Route path="/checkout" component={CheckoutForm} />
-            <Route path="/confirmation" component={Confirmation} />
-            <Redirect to="/home" />
-          </Switch>
-        ) : (
-          <Switch>
-            <Route exact path="/products" component={AllProducts} />
-            <Route path="/products/:id" component={SingleProduct} />
-            <Route exact path="/" component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/cart" component={Cart} />
-            <Route path="/checkout" component={CheckoutForm} />
-            <Route path="/confirmation" component={Confirmation} />
-          </Switch>
-        )}
-      </div>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/products" component={AllProducts} />
+        <Route path="/products/:id" component={SingleProduct} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/checkout" component={CheckoutForm} />
+        <Route path="/confirmation" component={Confirmation} />
+        {isLoggedIn && <Route path="/orderHistory" component={OrderHistory} />}
+        {!isLoggedIn && <Route path="/login" component={Login} />}
+        {!isLoggedIn && <Route path="/signup" component={Signup} />}
+        <Redirect to="/" />
+      </Switch>
     );
   }
 }
