@@ -14,6 +14,7 @@ import Confirmation from "./components/Confirmation";
 import CreateProduct from "./components/CreateProduct";
 import EditProduct from "./components/EditProduct";
 import AllUsers from "./components/AllUsers";
+import Checkout from './components/Checkout';
 
 /**
  * COMPONENT
@@ -36,7 +37,8 @@ class Routes extends Component {
             <Route path="/home" component={Home} />
             <Route path="/cart" component={Cart} />
             <Route path="/orderHistory" component={OrderHistory} />
-            <Route path="/checkout" component={CheckoutForm} />
+            {/* <Route path="/checkout" component={CheckoutForm} /> */}
+            <Route path="/checkout" component={Checkout} />
             <Route path="/confirmation" component={Confirmation} />
             {isAdmin && (
               <>
@@ -60,7 +62,8 @@ class Routes extends Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route path="/cart" component={Cart} />
-            <Route path="/checkout" component={CheckoutForm} />
+            {/* <Route path="/checkout" component={CheckoutForm} /> */}
+            <Route path="/checkout" component={Checkout} />
             <Route path="/confirmation" component={Confirmation} />
           </Switch>
         )}
