@@ -1,9 +1,9 @@
-const router = require('express').Router();
-const { Product } = require('../db');
+const router = require("express").Router();
+const { Product } = require("../db");
 module.exports = router;
 
 //GETS ROUTE FOR ALL PRODUCTS
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const products = await Product.findAll({});
     res.json(products);
@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
 
 //GET ROUTE FOR SINGLE PRODUCT
 
-router.get('/:id', async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const getOneProduct = await Product.findByPk(req.params.id);
     res.json(getOneProduct);
