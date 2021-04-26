@@ -12,7 +12,6 @@ import OrderHistory from "./components/OrderHistory";
 import Confirmation from "./components/Confirmation";
 import CreateProduct from "./components/CreateProduct";
 import EditProduct from "./components/EditProduct";
-import EditUser from "./components/EditUser";
 import AllUsers from "./components/AllUsers";
 
 /**
@@ -25,7 +24,7 @@ class Routes extends Component {
   }
 
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, isAdmin } = this.props;
 
     return (
       <div>
@@ -38,10 +37,18 @@ class Routes extends Component {
             <Route path="/orderHistory" component={OrderHistory} />
             <Route path="/checkout" component={CheckoutForm} />
             <Route path="/confirmation" component={Confirmation} />
-            <Route exact path="/admin/products" component={CreateProduct} />
-            <Route exact path="/admin/products/:id" component={EditProduct} />
-            <Route exact path="/admin/users" component={AllUsers} />
-            <Route exact path="/admin/users/:id" component={EditUser} />
+            {isAdmin && (
+              <>
+                <Route exact path="/admin/products" component={CreateProduct} />
+                <Route
+                  exact
+                  path="/admin/products/:id"
+                  component={EditProduct}
+                />
+                <Route exact path="/admin/users" component={AllUsers} />
+              </>
+            )}
+
             <Redirect to="/home" />
           </Switch>
         ) : (
@@ -69,6 +76,7 @@ const mapState = (state) => {
     // Being 'logged in' for our purposes will be defined has having a state.auth that has a truthy id.
     // Otherwise, state.auth will be an empty object, and state.auth.id will be falsey
     isLoggedIn: !!state.auth.id,
+    isAdmin: state.auth.isAdmin,
   };
 };
 

@@ -4,12 +4,6 @@ export const UPDATE_USER = "UPDATE_USER";
 export const SET_USER = "SET_USER";
 export const DELETE_USER = "DELETE_USER";
 
-export const _deleteUser = (user) => {
-  return {
-    type: DELETE_USER,
-    user,
-  };
-};
 const setUsers = (users) => {
   return {
     type: SET_USER,
@@ -19,6 +13,13 @@ const setUsers = (users) => {
 export const _updateUser = (user) => {
   return {
     type: UPDATE_USER,
+    user,
+  };
+};
+
+export const _deleteUser = (user) => {
+  return {
+    type: DELETE_USER,
     user,
   };
 };
@@ -50,9 +51,13 @@ export const updateUser = (user, history) => {
   };
 };
 
-export const deleteUser = (user, { history }) => {
+export const deleteUser = (user, history) => {
   return async (dispatch) => {
-    await axios.delete(`/api/admin/users/${user.id}`);
+    await axios.delete(`/api/admin/users/${user.id}`, {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+    });
     dispatch(_deleteUser(user));
     history.push("/");
   };
@@ -67,11 +72,17 @@ export default function usersReducer(state = initialState, action) {
     case SET_USER:
       return { ...state, all: action.users };
     case UPDATE_USER:
-      return state.map((user) =>
-        user.id === action.user.id ? action.user : user
-      );
+      return {
+        ...state,
+        all: state.all.map((user) =>
+          user.id === action.user.id ? action.user : user
+        ),
+      };
     case DELETE_USER:
-      return state.filter((user) => user.id !== action.user.id);
+      return {
+        ...state,
+        all: state.all.filter((user) => user.id !== action.user.id),
+      };
     default:
       return state;
   }

@@ -14,25 +14,7 @@ router.get("/users", async (req, res, next) => {
 router.post("/products", async (req, res, next) => {
   try {
     const newProduct = await Product.create(req.body);
-    // product.code = req.body.code;
-    // product.name = req.body.name;
-    // product.quantity = req.body.quantity;
-    // product.description = req.body.description;
-    // product.price = req.body.price;
-    // product.category = req.body.category;
-    // product.imageUrl = req.body.imageUrl;
-
-    // const add = await Product.add(product);
     res.send(newProduct);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.delete("/products/:id", async (req, res, next) => {
-  try {
-    const destroy = await Product.destroy(req.params.id);
-    res.send(destroy);
   } catch (err) {
     next(err);
   }
@@ -40,16 +22,18 @@ router.delete("/products/:id", async (req, res, next) => {
 
 router.put("/products/:id", async (req, res, next) => {
   try {
-    const update = await Product.findbyPk(req.params.id);
-    await update.update({
-      code: req.body.code,
-      name: req.body.name,
-      quantity: req.body.quantity,
-      description: req.body.description,
-      price: req.body.price,
-      category: req.body.category,
-      imageUrl: req.body.imageUrl,
-    });
+    const update = await Product.findByPk(req.params.id);
+    await update.update(req.body);
+    res.send(update);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/users/:id", async (req, res, next) => {
+  try {
+    const update = await User.findByPk(req.params.id);
+    await update.update(req.body);
     res.send(update);
   } catch (err) {
     next(err);
@@ -63,5 +47,14 @@ router.delete("/users/:id", async (req, res, next) => {
     res.send(user);
   } catch (error) {
     next(error);
+  }
+});
+router.delete("/products/:id", async (req, res, next) => {
+  try {
+    const product = await Product.findByPk(req.params.id);
+    await product.destroy();
+    res.send(product);
+  } catch (err) {
+    next(err);
   }
 });
