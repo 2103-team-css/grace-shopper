@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import StripeCheckout from 'react-stripe-checkout';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { removeCart } from '../store/cart';
+import { fetchHistory } from '../store/orderHistory';
 
 
 toast.configure();
 
-const Checkout = () => {
+const Checkout = (props) => {
     const cart = useSelector((state) => state.cart);
     const userId = useSelector((state) => state.auth.id);
+    const dispatch = useDispatch();
+    console.log('props>>>', props);
+    const { history } = props;
 
     const total = cart.reduce((acc, item) => {
         return acc + (item.price * item.quantity)
@@ -31,15 +36,28 @@ async function handleToken( token ) {
         }
       })
       console.log('response>>>', response);
-      const { status } = response.data;
+      const { orderCode, status } = response.data;
       console.log('status>>>', status);
       if(status === 'success') {
-          toast('Success! Check your order history.', { type: 'success'} )
+          toast('Success! Check your order history.', { type: 'success'} );
+          dispatch(fetchHistory(userId));
+          dispatch(removeCart(userId));
+          history.push("/confirmation", 
+        {
+            successful: true,
+            cart: cart,
+            orderCode: orderCode,
+            total: total,
+          },
+        );
       }   else {
-          toast('Sorry, something went wrong.', { type: 'error'} )
-      }
+          toast('Sorry, something went wrong.', { type: 'error'} );
+          history.push( "/confirmation", {
+            successful: false,
+          });
+        }
     } else {
-      const response = await axios.post('/api/checkout/', 
+      const response = await axios.post('/api/checkout/guest', 
       {
           cart,
           token,

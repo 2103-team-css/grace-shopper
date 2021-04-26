@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const OrderHistory = () => {
   const orderHistory = useSelector((state) => state.orderHistory);
-
+  console.log('orderHistory>>>', orderHistory);
   return (
     <div>
       Order History:

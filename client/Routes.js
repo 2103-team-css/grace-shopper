@@ -7,7 +7,6 @@ import { Login, Signup } from './components/AuthForm';
 import Home from './components/Home';
 import SingleProduct from './components/SingleProduct';
 import { me } from './store';
-// import CheckoutForm from './components/CheckoutForm';
 import Checkout from './components/Checkout';
 import OrderHistory from './components/OrderHistory';
 import Confirmation from './components/Confirmation';

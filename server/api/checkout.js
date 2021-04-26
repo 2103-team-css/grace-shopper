@@ -8,7 +8,7 @@ const { db, Product, Order, Cart } = require('../db');
 
 // guest checkout
 // POST api/checkout/guest
-router.post('/', async (req, res, next) => {
+router.post('/guest', async (req, res, next) => {
   let status;
   
   try {
@@ -34,6 +34,7 @@ router.post('/', async (req, res, next) => {
             quantity: item.quantity,
             price: product.price,
             total: product.price * item.quantity,
+            // userId: //?
           },
           transaction: t,
         });
@@ -93,7 +94,7 @@ router.post('/:userId', isLoggedIn, isOwner, async (req, res, next) => {
     await db.transaction(async (t) => {
       const order = await Order.create(
         {
-          userId: req.body.id,
+          userId: req.params.userId,
           email,
           orderCode,
         },
@@ -101,6 +102,7 @@ router.post('/:userId', isLoggedIn, isOwner, async (req, res, next) => {
       );
 
       for (let item of cart) {
+        const userId = req.body.id;
         const product = await Product.findByPk(item.productId, { transaction: t });
         await product.update({ quantity: product.quantity - item.quantity }, { transaction: t });
         await Cart.destroy({ where: { id: item.id }, transaction: t });
@@ -109,6 +111,7 @@ router.post('/:userId', isLoggedIn, isOwner, async (req, res, next) => {
             quantity: item.quantity,
             price: product.price,
             total: product.price * item.quantity,
+            userId: userId,
           },
           transaction: t,
         });
