@@ -3,40 +3,39 @@ import { useSelector } from 'react-redux';
 import StripeCheckout from 'react-stripe-checkout';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
+// import {loadStripe} from '@stripe/stripe-js'
+// const stripePromise = loadStripe(
+//   'pk_test_51IjxKTGFSgaIbDDasICfYfeRGHxBZIYxxQSjnjPJNCRozSkoRtFdcPIY6Kkhk6NrplsRyE4c5kJ62ERaXObksxYB00ko9ylzJM'
+// )
 
 
 toast.configure();
 
 const Checkout = () => {
     const cart = useSelector((state) => state.cart);
-    // console.log('cart>>>', cart);
-
-    const userId = useSelector((state) => state.auth.id);
-    // console.log('userId>>>', userId);
-
-    const email = useSelector((state) => state.auth.email);
-    // console.log('email>>>', email);
+    // const userId = useSelector((state) => state.auth.id);
+    // const email = useSelector((state) => state.auth.email);
 
     const total = cart.reduce((acc, item) => {
         return acc + item.price
         }, 0);
-        // console.log('total>>>', total);
     
-async function handleToken( token, address ) {
-    console.log('token! & address!>>>', {token, address});
-    const response = await axios.post('/checkout', 
+async function handleToken( token ) {
+    console.log('token>>>', {token} );
+    const response = await axios.post('/api/checkout', 
     {
         token,
-        address
     })
-    
+    console.log('response>>>', response);
     const { status } = response.data;
-    if(status === 'status') {
+    console.log('status>>>', status);
+    if(status === 'success') {
         toast('Success! Check your order history.', { type: 'success'} )
     }   else {
         toast('Sorry, something went wrong.', { type: 'error'} )
     }
+
 } 
 
     return(

@@ -5,6 +5,54 @@ const stripe = require('stripe')('sk_test_51IjxKTGFSgaIbDDaFA14lyE6FCAfS9isY4OXd
 const { isLoggedIn, isOwner } = require('../middleware');
 const { db, Product, Order, Cart } = require('../db');
 
+// POST /api/checkout
+router.post('/', async(req, res) => {
+  
+  let error;
+  let status;
+
+  try {
+    console.log("Req body>>>", req.body);
+    const { token } = req.body;
+    const customer = await 
+    stripe.customers.create({
+      name: token.card.name,
+      email: token.email,
+      method: token.type,
+    });
+
+    const unique_key = uuid();
+
+    const charge = await stripe.charges.create({
+      amount: cart.price * 100,
+      currency: "usd",
+      customer: customer,
+      receipt_email: token.email,
+      description: "Cart items purchased",
+      shipping: {
+        name: token.card.name,
+        address: {
+          line1: token.card.address_line1,
+          line2: token.card.address_line2,
+          city: token.card.address_city,
+          country: token.card.address_country,
+          postal_code: token.card.address_zip,
+        }
+      }
+    },
+    {
+      unique_key
+    });
+    console.log('Charge success: ', { charge });
+    status = 'success';
+  } catch (err) {
+    console.error('Error:', err);
+    status = 'failure';
+  }
+
+  res.json( {error, status} );
+});
+
 // guest checkout
 // POST api/checkout/guest
 router.post('/guest', async (req, res, next) => {
@@ -82,52 +130,5 @@ router.post('/:userId', isLoggedIn, isOwner, async (req, res, next) => {
     next(error);
   }
 });
-
-// POST /api/checkout
-router.post('/', async(req, res) => {
-  console.log("Req body>>>", req.body);
-  let error;
-  let status;
-
-  try {
-    const { cart, token } = req.body;
-    const customer = await 
-    stripe.customers.create({
-      email: token.email,
-      source: token.id
-    });
-
-    const unique_key = uuid();
-
-    const charge = await stripe.charges.create({
-      amount: cart.price * 100,
-      currency: "usd",
-      customer: customer.id,
-      receipt_email: token.email,
-      description: "Cart items purchased",
-      shipping: {
-        name: token.card.name,
-        address: {
-          line1: token.card.address_line1,
-          line2: token.card.address_line2,
-          city: token.card.address_city,
-          country: token.card.address_country,
-          postal_code: token.card.address_zip,
-
-        }
-      }
-    },
-    {
-      unique_key
-    });
-    console.log('Charge success: ', { charge });
-    status = 'success';
-  } catch (err) {
-    console.error('Error:', err);
-    status = 'failure';
-  }
-
-  res.json( {error, status} );
-})
 
 module.exports = router;
