@@ -2,7 +2,14 @@ import axios from "axios";
 
 export const UPDATE_USER = "UPDATE_USER";
 export const SET_USER = "SET_USER";
+export const DELETE_USER = "DELETE_USER";
 
+export const _deleteUser = (user) => {
+  return {
+    type: DELETE_USER,
+    user,
+  };
+};
 const setUsers = (users) => {
   return {
     type: SET_USER,
@@ -43,6 +50,14 @@ export const updateUser = (user, history) => {
   };
 };
 
+export const deleteUser = (user, { history }) => {
+  return async (dispatch) => {
+    await axios.delete(`/api/admin/users/${user.id}`);
+    dispatch(_deleteUser(user));
+    history.push("/");
+  };
+};
+
 const initialState = {
   all: [],
 };
@@ -55,6 +70,8 @@ export default function usersReducer(state = initialState, action) {
       return state.map((user) =>
         user.id === action.user.id ? action.user : user
       );
+    case DELETE_USER:
+      return state.filter((user) => user.id !== action.user.id);
     default:
       return state;
   }
