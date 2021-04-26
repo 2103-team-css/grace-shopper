@@ -14,17 +14,17 @@ toast.configure();
 
 const Checkout = () => {
     const cart = useSelector((state) => state.cart);
-    // const userId = useSelector((state) => state.auth.id);
-    // const email = useSelector((state) => state.auth.email);
 
     const total = cart.reduce((acc, item) => {
-        return acc + item.price
+        return acc + (item.price * item.quantity)
         }, 0);
     
+
 async function handleToken( token ) {
     console.log('token>>>', {token} );
     const response = await axios.post('/api/checkout', 
     {
+        cart,
         token,
     })
     console.log('response>>>', response);

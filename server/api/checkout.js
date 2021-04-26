@@ -12,21 +12,29 @@ router.post('/', async(req, res) => {
   let status;
 
   try {
-    console.log("Req body>>>", req.body);
-    const { token } = req.body;
+    // console.log("Req body>>>", req.body);
+    const { cart, token } = req.body;
+ 
+    console.log('cart>>>', cart);
+    console.log('token>>>', token);
+
     const customer = await 
     stripe.customers.create({
       name: token.card.name,
       email: token.email,
-      method: token.type,
     });
 
-    const unique_key = uuid();
+    const idempotencyKey = uuid();
+    let total = 0;
+    for (let item of cart) {
+      const product = await Product.findByPk(item.productId);
+      total += product.price * item.quantity;
+    }
 
     const charge = await stripe.charges.create({
-      amount: cart.price * 100,
+      amount: total,
       currency: "usd",
-      customer: customer,
+      source: token.id,
       receipt_email: token.email,
       description: "Cart items purchased",
       shipping: {
@@ -41,8 +49,9 @@ router.post('/', async(req, res) => {
       }
     },
     {
-      unique_key
-    });
+      idempotencyKey
+    }
+    );
     console.log('Charge success: ', { charge });
     status = 'success';
   } catch (err) {
