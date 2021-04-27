@@ -1,8 +1,6 @@
 const router = require('express').Router();
 const { v4: uuid } = require('uuid');
-const stripe = require('stripe')(
-  'sk_test_51IjxKTGFSgaIbDDaFA14lyE6FCAfS9isY4OXdreQdG4yDmdYf0Vp4gULY4OXOKkKOX9G0e8xdy5gSQF73f6qegh500OYvXpo5N'
-);
+const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 const { isLoggedIn, isOwner } = require('../middleware');
 const { db, Product, Order, Cart } = require('../db');

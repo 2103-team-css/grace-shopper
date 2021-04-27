@@ -72,7 +72,7 @@ export const updateProduct = (product, history, id) => {
         },
       });
       dispatch(_updateProduct(updated));
-      history.push(`/admin/products/${id}`);
+      history.push(`/products/${id}`);
     } catch (error) {
       console.error(error);
     }

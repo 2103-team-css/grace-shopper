@@ -90,13 +90,23 @@ const AllProducts = (props) => {
   if (access === false) filteredProd = filteredArr(filteredProd, 'accessories');
 
   //pagination:
+  const pageCount = Math.ceil(filteredProd.length / productsPerPage);
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProd.slice(indexOfFirstProduct, indexOfLastProduct);
+
   //page-changer:
   const paginate = (event, num) => {
     setCurrentPage(num);
   };
+
+  useEffect(() => {
+    if (filteredProd.length) {
+      setCurrentPage(Math.min(currentPage, pageCount));
+    } else {
+      setCurrentPage(1);
+    }
+  }, [strs, perc, keys, access]);
 
   return (
     <Container>
@@ -143,11 +153,7 @@ const AllProducts = (props) => {
         </Grid>
       </Grid>
       <Box mt={3} display="flex" justifyContent="center">
-        <Pagination
-          productsPerPage={productsPerPage}
-          totalProducts={filteredProd.length}
-          paginate={paginate}
-        />
+        <Pagination pageCount={pageCount} paginate={paginate} currentPage={currentPage} />
       </Box>
       <Box mt={3}>
         <Grid container spacing={2}>
@@ -166,7 +172,6 @@ const AllProducts = (props) => {
                     <Typography>
                       <strong>{product.quantity} Left in Stock</strong>
                     </Typography>
-                    {/* <Typography>{product.category}</Typography> */}
                     <Button
                       variant="contained"
                       color="primary"

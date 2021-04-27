@@ -3,6 +3,10 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const app = express();
 module.exports = app;
 

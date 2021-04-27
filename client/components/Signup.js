@@ -3,62 +3,82 @@ import { connect } from 'react-redux';
 import { authenticateSignup } from '../store';
 import { withFormik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Container, makeStyles, Grid, Box } from '@material-ui/core';
+
+const useStyles = makeStyles(() => ({
+  formContainer: {
+    margin: '1rem auto',
+  },
+  form: {
+    width: '100%',
+  },
+}));
 
 /** Reformatted with Formik: */
-const SignUpForm = ({ values, errors, touched, handleChange, isSubmitting }) => (
-  <div>
-    <Form style={{ margin: '6px' }} name={values.displayName}>
-      <div>
-        <label>Email: </label>
-        <Field
-          as={TextField}
-          style={{ height: '25px' }}
-          name="email"
-          placeholder="email"
-          onChange={handleChange}
-        />
-        <div style={{ color: 'red' }}>{touched.email && errors.email && <p>{errors.email}</p>}</div>
-      </div>
-      <p />
-      <div>
-        <label>Password: </label>
-        <Field
-          as={TextField}
-          style={{ height: '25px' }}
-          name="password"
-          placeholder="password"
-          onChange={handleChange}
-          type="password"
-        />
-        <div style={{ color: 'red' }}>
-          {touched.password && errors.password && <p>{errors.password}</p>}
-        </div>
-      </div>
-      <p />
-      <div>
-        <label>Full Name: </label>
-        <Field
-          as={TextField}
-          style={{ height: '25px' }}
-          name="fullName"
-          placeholder="full name"
-          onChange={handleChange}
-        />
-        <div style={{ color: 'red' }}>
-          {touched.fullName && errors.fullName && <p>{errors.fullName}</p>}
-        </div>
-      </div>
-      <p />
-      <div>
-        <Button type="submit" disabled={isSubmitting}>
-          Sign Up
-        </Button>
-      </div>
-      {errors && errors.response && <div> {errors.response.data} </div>}
-    </Form>
-  </div>
-);
+const SignUpForm = ({ values, errors, touched, handleChange, isSubmitting }) => {
+  const classes = useStyles();
+  return (
+    <Container maxWidth="sm" className={classes.formContainer}>
+      <Box mt={3}>
+        <Form name={values.displayName}>
+          <Grid container spacing={2} direction="column" alignItems="center">
+            <Grid item xs={12} sm={6}>
+              <Field
+                as={TextField}
+                id="email"
+                label="Email"
+                variant="outlined"
+                fullWidth
+                error={touched.email && !!errors.email}
+                helperText={errors.email}
+                name="email"
+                placeholder="email"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field
+                as={TextField}
+                id="password"
+                label="Password"
+                variant="outlined"
+                fullWidth
+                error={touched.password && !!errors.password}
+                helperText={errors.password}
+                name="password"
+                placeholder="password"
+                type="password"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field
+                as={TextField}
+                id="fullName"
+                label="Full Name"
+                variant="outlined"
+                fullWidth
+                error={touched.fullName && !!errors.fullName}
+                helperText={errors.fullName}
+                name="fullName"
+                placeholder="full name"
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                variant="contained"
+                fullWidth
+                color="primary"
+              >
+                Sign Up
+              </Button>
+            </Grid>
+          </Grid>
+        </Form>
+      </Box>
+    </Container>
+  );
+};
 
 const SignUpFormApp = withFormik({
   mapPropsToValues() {

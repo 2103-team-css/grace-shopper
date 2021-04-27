@@ -45,8 +45,8 @@ const OrderHistory = () => {
                         <TableHead>
                           <TableRow>
                             <TableCell>Item</TableCell>
-                            <TableCell align="right">Price ($)</TableCell>
-                            <TableCell align="right">Quantity</TableCell>
+                            <TableCell align="center">Price ($)</TableCell>
+                            <TableCell align="center">Quantity</TableCell>
                             <TableCell align="right">Total ($)</TableCell>
                           </TableRow>
                         </TableHead>
@@ -60,8 +60,8 @@ const OrderHistory = () => {
                                     {item.name}
                                   </Link>
                                 </TableCell>
-                                <TableCell align="right">{item.price / 100}</TableCell>
-                                <TableCell align="right">{item.quantity}</TableCell>
+                                <TableCell align="center">{item.price / 100}</TableCell>
+                                <TableCell align="center">{item.quantity}</TableCell>
                                 <TableCell align="right">
                                   {(item.price * item.quantity) / 100}
                                 </TableCell>
