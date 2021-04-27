@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { fetchOneProduct } from "../store/singleProduct";
-import { deleteProduct } from "../store/products";
-import { createCartItem } from "../store/cart";
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { fetchOneProduct } from '../store/singleProduct';
+import { deleteProduct } from '../store/products';
+import { createCartItem } from '../store/cart';
+import { Link as RouterLink } from 'react-router-dom';
 
 import {
   Grid,
@@ -45,7 +45,7 @@ const SingleProduct = (props) => {
     props.getOneProduct(props.match.params.id);
   }, []);
 
-  const { oneProduct, userId, isAdmin } = props;
+  const { oneProduct, userId, isAdmin, deleteProduct } = props;
 
   return (
     <Container>
@@ -68,6 +68,8 @@ const SingleProduct = (props) => {
                     direction="column"
                     justify="space-around"
                     className={classes.maxHeight}
+                    spacing={2}
+                    wrap="nowrap"
                   >
                     <Grid item>
                       <Typography component="h6" variant="h6">
@@ -108,6 +110,29 @@ const SingleProduct = (props) => {
                         Add to Cart
                       </Button>
                     </Grid>
+                    {isAdmin && (
+                      <Grid item container spacing={2}>
+                        <Grid item>
+                          <Button
+                            to={`/admin/products/${oneProduct.id}`}
+                            component={RouterLink}
+                            color="primary"
+                            variant="contained"
+                          >
+                            Edit Product
+                          </Button>
+                        </Grid>
+                        <Grid item>
+                          <Button
+                            onClick={() => deleteProduct(oneProduct.id)}
+                            color="secondary"
+                            variant="contained"
+                          >
+                            Delete Product
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    )}
                   </Grid>
                 </CardContent>
               </Grid>
@@ -115,18 +140,6 @@ const SingleProduct = (props) => {
           </Card>
         </Grid>
       </Grid>
-      {isAdmin && (
-          <>
-            {" "}
-            <button
-              className="remove"
-              onClick={() => deleteProduct(oneProduct.id)}
-            >
-              Delete
-            </button>
-            <Link to={`/admin/products/${oneProduct.id}`}> Edit Product: </Link>
-          </>
-        )}
     </Container>
   );
 };

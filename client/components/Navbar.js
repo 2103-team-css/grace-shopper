@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { logout } from '../store';
 
-import { AppBar, Toolbar, Typography, Button, makeStyles } from '@material-ui/core';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  makeStyles,
+  Grid,
+  Menu,
+  MenuItem,
+  IconButton,
+  Badge,
+} from '@material-ui/core';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const useStyles = makeStyles(() => ({
   navbar: {
@@ -13,49 +26,101 @@ const useStyles = makeStyles(() => ({
     textTransform: 'none',
     justifyContent: 'flex-start',
   },
+  icons: {
+    color: 'white',
+  },
 }));
 
-const Navbar = ({ handleClick, isLoggedIn, isAdmin }) => {
+const Navbar = ({ handleClick, isLoggedIn, isAdmin, cart }) => {
   const classes = useStyles();
+
+  const [profileAnchor, setProfileAnchor] = useState(null);
+
+  const handleOpen = (event) => {
+    setProfileAnchor(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setProfileAnchor(null);
+  };
+
   return (
     <AppBar position="static" className={classes.navbar}>
       <Toolbar>
-        <Button color="inherit" className={classes.title} component={RouterLink} to="/">
-          <Typography variant="h6">Grace Rocker</Typography>
-        </Button>
-        <Button color="inherit" component={RouterLink} to="/products">
-          Products
-        </Button>
-        <Button color="inherit" component={RouterLink} to="/cart">
-          Cart
-        </Button>
-        {isLoggedIn ? (
-          <React.Fragment>
-            {/* The navbar will show these links after you log in */}
-            <Button color="inherit" onClick={handleClick}>
-              Logout
+        <Grid container alignItems="center" wrap="nowrap">
+          <Grid item>
+            <Button color="inherit" className={classes.title} component={RouterLink} to="/">
+              <Typography variant="h6">Grace Rocker</Typography>
             </Button>
-            <Button color="inherit" component={RouterLink} to="/orderHistory">
-              Order History
+          </Grid>
+          <Grid item>
+            <Button color="inherit" component={RouterLink} to="/products">
+              Products
             </Button>
-            {isAdmin && (
-              <>
-                <RouterLink to="/admin/products"> Add Product</RouterLink>
-                <RouterLink to="/admin/users"> All Users</RouterLink>
-              </>
-            )}
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            {/* The navbar will show these links before you log in */}
-            <Button color="inherit" component={RouterLink} to="/login">
-              Login
-            </Button>
-            <Button color="inherit" component={RouterLink} to="/signup">
-              Sign Up
-            </Button>
-          </React.Fragment>
-        )}
+          </Grid>
+          {isLoggedIn && (
+            <React.Fragment>
+              <Grid item>
+                <Button color="inherit" component={RouterLink} to="/orderHistory">
+                  Order History
+                </Button>
+              </Grid>
+              {isAdmin && (
+                <Button color="inherit" to="/admin/products" component={RouterLink}>
+                  Add Product
+                </Button>
+              )}
+              {isAdmin && (
+                <Button color="inherit" to="/admin/users" component={RouterLink}>
+                  All Users
+                </Button>
+              )}
+            </React.Fragment>
+          )}
+        </Grid>
+        <Grid container alignItems="center" justify="flex-end">
+          <Grid item className={classes.icons}>
+            <IconButton color="inherit" component={RouterLink} to="/cart">
+              <Badge badgeContent={cart.length} color="error">
+                <ShoppingCartIcon fontSize="large" />
+              </Badge>
+            </IconButton>
+          </Grid>
+          <Grid item className={classes.icons}>
+            <IconButton onClick={handleOpen} color="inherit">
+              <AccountCircleIcon fontSize="large" />
+            </IconButton>
+            <Menu
+              id="simple-menu"
+              anchorEl={profileAnchor}
+              keepMounted
+              open={Boolean(profileAnchor)}
+              onClose={handleClose}
+            >
+              {!isLoggedIn && (
+                <MenuItem onClick={handleClose}>
+                  <Button color="inherit" component={RouterLink} to="/login">
+                    Login
+                  </Button>
+                </MenuItem>
+              )}
+              {!isLoggedIn && (
+                <MenuItem onClick={handleClose}>
+                  <Button color="inherit" component={RouterLink} to="/signup">
+                    Sign Up
+                  </Button>
+                </MenuItem>
+              )}
+              {isLoggedIn && (
+                <MenuItem onClick={handleClose}>
+                  <Button color="inherit" onClick={handleClick}>
+                    Logout
+                  </Button>
+                </MenuItem>
+              )}
+            </Menu>
+          </Grid>
+        </Grid>
       </Toolbar>
     </AppBar>
   );
@@ -68,6 +133,7 @@ const mapState = (state) => {
   return {
     isLoggedIn: !!state.auth.id,
     isAdmin: state.auth.isAdmin,
+    cart: state.cart,
   };
 };
 

@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
 //action types
-export const SET_PRODUCTS = "SET_PRODUCTS";
-export const CREATE_PRODUCT = "CREATE_PRODUCT";
-export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
-export const DELETE_PRODUCT = "DELETE_PRODUCT";
+export const SET_PRODUCTS = 'SET_PRODUCTS';
+export const CREATE_PRODUCT = 'CREATE_PRODUCT';
+export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
+export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 
 //action creator
 const setProducts = (products) => {
@@ -38,56 +38,60 @@ export const _deleteProduct = (product) => {
 
 export const fetchProducts = () => {
   return async (dispatch) => {
-    const { data: products } = await axios.get("/api/products");
-    dispatch(setProducts(products));
+    try {
+      const { data: products } = await axios.get('/api/products');
+      dispatch(setProducts(products));
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
 export const createProduct = (product, history) => {
-  try {
-    return async (dispatch) => {
-      const { data: created } = await axios.post(
-        "/api/admin/products",
-        product,
-        {
-          headers: {
-            authorization: localStorage.getItem("token"),
-          },
-        }
-      );
+  return async (dispatch) => {
+    try {
+      const { data: created } = await axios.post('/api/admin/products', product, {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      });
       dispatch(_createProduct(created));
-      history.push("/");
-    };
-  } catch (error) {
-    next(error);
-  }
+      history.push('/products');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 };
 
 export const updateProduct = (product, history, id) => {
   return async (dispatch) => {
-    const { data: updated } = await axios.put(
-      `/api/admin/products/${id}`,
-      product,
-      {
+    try {
+      const { data: updated } = await axios.put(`/api/admin/products/${id}`, product, {
         headers: {
-          authorization: localStorage.getItem("token"),
+          authorization: localStorage.getItem('token'),
         },
-      }
-    );
-    dispatch(_updateProduct(updated));
-    history.push("/");
+      });
+      dispatch(_updateProduct(updated));
+      history.push(`/admin/products/${id}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
 export const deleteProduct = (id, history) => {
   return async (dispatch) => {
-    await axios.delete(`/api/admin/products/${id}`, {
-      headers: {
-        authorization: localStorage.getItem("token"),
-      },
-    });
-    dispatch(_deleteProduct(id));
-    history.push("/");
+    try {
+      await axios.delete(`/api/admin/products/${id}`, {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      });
+      dispatch(_deleteProduct(id));
+      history.push('/products');
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 // reducer
@@ -99,9 +103,7 @@ export default function productsReducer(state = [], action) {
     case CREATE_PRODUCT:
       return [...state, action.product];
     case UPDATE_PRODUCT:
-      return state.map((product) =>
-        product.id === action.product.id ? action.product : product
-      );
+      return state.map((product) => (product.id === action.product.id ? action.product : product));
     case DELETE_PRODUCT:
       return state.filter((product) => product.id !== action.product);
     default:

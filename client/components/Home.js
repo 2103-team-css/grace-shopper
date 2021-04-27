@@ -23,7 +23,7 @@ export const Home = () => {
     <Grid
       className={classes.background}
       container
-      justify="start"
+      justify="flex-start"
       alignItems="center"
       direction="column"
     >

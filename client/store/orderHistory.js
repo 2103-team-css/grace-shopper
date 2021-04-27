@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 //action types
 export const SET_HISTORY = 'SET_HISTORY';
@@ -12,9 +12,7 @@ const setHistory = (history) => {
 };
 
 //thunk
-
 export const fetchHistory = (userId) => {
-  console.log('fetch history block hit!');
   return async (dispatch) => {
     const { data: history } = await axios.get(`/api/orders/${userId}`, {
       headers: {

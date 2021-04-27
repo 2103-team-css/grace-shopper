@@ -43,6 +43,10 @@ const Cart = () => {
 
   const classes = useStyles();
 
+  const total = cart.reduce((acc, item) => {
+    return acc + item.price * item.quantity;
+  }, 0);
+
   const changeQty = (item, mod) => {
     dispatch(
       updateCartItem({
@@ -122,7 +126,7 @@ const Cart = () => {
                   <TableCell component="th" scope="row" />
                   <TableCell align="right" />
                   <TableCell align="right" />
-                  <TableCell align="right">Total</TableCell>
+                  <TableCell align="right">{total / 100}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>

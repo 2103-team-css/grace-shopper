@@ -38,13 +38,9 @@ class Routes extends Component {
         {isLoggedIn && <Route path="/orderHistory" component={OrderHistory} />}
         {!isLoggedIn && <Route path="/login" component={Login} />}
         {!isLoggedIn && <Route path="/signup" component={Signup} />}
-        {isAdmin && (
-          <>
-            <Route exact path="/admin/products" component={CreateProduct} />
-            <Route exact path="/admin/products/:id" component={EditProduct} />
-            <Route exact path="/admin/users" component={AllUsers} />
-          </>
-        )}
+        {isAdmin && <Route exact path="/admin/products" component={CreateProduct} />}
+        {isAdmin && <Route exact path="/admin/products/:id" component={EditProduct} />}
+        {isAdmin && <Route exact path="/admin/users" component={AllUsers} />}
         <Redirect to="/" />
       </Switch>
     );
@@ -56,8 +52,6 @@ class Routes extends Component {
  */
 const mapState = (state) => {
   return {
-    // Being 'logged in' for our purposes will be defined has having a state.auth that has a truthy id.
-    // Otherwise, state.auth will be an empty object, and state.auth.id will be falsey
     isLoggedIn: !!state.auth.id,
     isAdmin: state.auth.isAdmin,
   };
@@ -71,6 +65,4 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-// The `withRouter` wrapper makes sure that updates are not blocked
-// when the url changes
 export default withRouter(connect(mapState, mapDispatch)(Routes));

@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { Product, User } = require('../db');
 module.exports = router;
 
-router.get("/users", async (req, res, next) => {
+router.get('/users', async (req, res, next) => {
   try {
     const user = await User.findAll();
     res.send(user);
@@ -11,7 +11,7 @@ router.get("/users", async (req, res, next) => {
   }
 });
 
-router.post("/products", async (req, res, next) => {
+router.post('/products', async (req, res, next) => {
   try {
     const newProduct = await Product.create(req.body);
     res.send(newProduct);
@@ -20,7 +20,7 @@ router.post("/products", async (req, res, next) => {
   }
 });
 
-router.put("/products/:id", async (req, res, next) => {
+router.put('/products/:id', async (req, res, next) => {
   try {
     const update = await Product.findByPk(req.params.id);
     await update.update(req.body);
@@ -30,7 +30,7 @@ router.put("/products/:id", async (req, res, next) => {
   }
 });
 
-router.put("/users/:id", async (req, res, next) => {
+router.put('/users/:id', async (req, res, next) => {
   try {
     const update = await User.findByPk(req.params.id);
     await update.update(req.body);
@@ -40,7 +40,7 @@ router.put("/users/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/users/:id", async (req, res, next) => {
+router.delete('/users/:id', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id);
     await user.destroy();
@@ -49,7 +49,8 @@ router.delete("/users/:id", async (req, res, next) => {
     next(error);
   }
 });
-router.delete("/products/:id", async (req, res, next) => {
+
+router.delete('/products/:id', async (req, res, next) => {
   try {
     const product = await Product.findByPk(req.params.id);
     await product.destroy();

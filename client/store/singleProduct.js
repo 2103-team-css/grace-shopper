@@ -15,8 +15,12 @@ const getOneProduct = (product) => {
 //thunk
 export const fetchOneProduct = (id) => {
   return async (dispatch) => {
-    const { data: oneProduct } = await axios.get(`/api/products/${id}`);
-    dispatch(getOneProduct(oneProduct));
+    try {
+      const { data: oneProduct } = await axios.get(`/api/products/${id}`);
+      dispatch(getOneProduct(oneProduct));
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 

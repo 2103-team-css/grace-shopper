@@ -1,6 +1,6 @@
-import React from "react";
-import { connect } from "react-redux";
-import { fetchUsers, deleteUser, updateUser } from "../store/user";
+import React from 'react';
+import { connect } from 'react-redux';
+import { fetchUsers, deleteUser, updateUser } from '../store/user';
 
 export class AllUsers extends React.Component {
   componentDidMount() {
@@ -18,10 +18,7 @@ export class AllUsers extends React.Component {
               <h4>Admin Status: {user.isAdmin.toString()}</h4>
             </div>
             <div>
-              <button
-                className="remove"
-                onClick={() => this.props.deleteUser(user)}
-              >
+              <button className="remove" onClick={() => this.props.deleteUser(user)}>
                 Delete User
               </button>
               <button
@@ -30,7 +27,7 @@ export class AllUsers extends React.Component {
                   this.props.updateUser(user);
                 }}
               >
-                {" "}
+                {' '}
                 Toggle Admin
               </button>
             </div>

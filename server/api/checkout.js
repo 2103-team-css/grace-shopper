@@ -1,16 +1,17 @@
 const router = require('express').Router();
 const { v4: uuid } = require('uuid');
-const stripe = require('stripe')('sk_test_51IjxKTGFSgaIbDDaFA14lyE6FCAfS9isY4OXdreQdG4yDmdYf0Vp4gULY4OXOKkKOX9G0e8xdy5gSQF73f6qegh500OYvXpo5N')
+const stripe = require('stripe')(
+  'sk_test_51IjxKTGFSgaIbDDaFA14lyE6FCAfS9isY4OXdreQdG4yDmdYf0Vp4gULY4OXOKkKOX9G0e8xdy5gSQF73f6qegh500OYvXpo5N'
+);
 
 const { isLoggedIn, isOwner } = require('../middleware');
 const { db, Product, Order, Cart } = require('../db');
-
 
 // guest checkout
 // POST api/checkout/guest
 router.post('/guest', async (req, res, next) => {
   let status;
-  
+
   try {
     const { cart, token } = req.body;
     const orderCode = uuid();
@@ -34,43 +35,42 @@ router.post('/guest', async (req, res, next) => {
             quantity: item.quantity,
             price: product.price,
             total: product.price * item.quantity,
-            // userId: //?
           },
           transaction: t,
         });
         total += product.price * item.quantity;
       }
     });
-    
+
     //integrate stripe logic here
-    const customer = await 
-    stripe.customers.create({
+    const customer = await stripe.customers.create({
       name: token.card.name,
       email: token.email,
     });
 
     const idempotencyKey = uuid();
 
-    const charge = await stripe.charges.create({
-      amount: total,
-      currency: "usd",
-      source: token.id,
-      receipt_email: token.email,
-      description: "Cart items purchased",
-      shipping: {
-        name: token.card.name,
-        address: {
-          line1: token.card.address_line1,
-          line2: token.card.address_line2,
-          city: token.card.address_city,
-          country: token.card.address_country,
-          postal_code: token.card.address_zip,
-        }
+    const charge = await stripe.charges.create(
+      {
+        amount: total,
+        currency: 'usd',
+        source: token.id,
+        receipt_email: token.email,
+        description: 'Cart items purchased',
+        shipping: {
+          name: token.card.name,
+          address: {
+            line1: token.card.address_line1,
+            line2: token.card.address_line2,
+            city: token.card.address_city,
+            country: token.card.address_country,
+            postal_code: token.card.address_zip,
+          },
+        },
+      },
+      {
+        idempotencyKey,
       }
-    },
-    {
-      idempotencyKey
-    }
     );
     console.log('Charge success: ', { charge });
     status = 'success';
@@ -79,12 +79,12 @@ router.post('/guest', async (req, res, next) => {
     status = 'failure';
     next(error);
   }
-  
 });
 
 // logged in
 // /api/checkout/:userId
 router.post('/:userId', isLoggedIn, isOwner, async (req, res, next) => {
+  let status;
   try {
     const { cart, token } = req.body;
     const orderCode = uuid();
@@ -120,38 +120,38 @@ router.post('/:userId', isLoggedIn, isOwner, async (req, res, next) => {
     });
 
     //integrate stripe logic here
-    const customer = await 
-    stripe.customers.create({
+    const customer = await stripe.customers.create({
       name: token.card.name,
       email: token.email,
     });
 
     const idempotencyKey = uuid();
 
-    const charge = await stripe.charges.create({
-      amount: total,
-      currency: "usd",
-      source: token.id,
-      receipt_email: token.email,
-      description: "Cart items purchased",
-      shipping: {
-        name: token.card.name,
-        address: {
-          line1: token.card.address_line1,
-          line2: token.card.address_line2,
-          city: token.card.address_city,
-          country: token.card.address_country,
-          postal_code: token.card.address_zip,
-        }
+    const charge = await stripe.charges.create(
+      {
+        amount: total,
+        currency: 'usd',
+        source: token.id,
+        receipt_email: token.email,
+        description: 'Cart items purchased',
+        shipping: {
+          name: token.card.name,
+          address: {
+            line1: token.card.address_line1,
+            line2: token.card.address_line2,
+            city: token.card.address_city,
+            country: token.card.address_country,
+            postal_code: token.card.address_zip,
+          },
+        },
+      },
+      {
+        idempotencyKey,
       }
-    },
-    {
-      idempotencyKey
-    }
     );
-console.log('Charge success: ', { charge });
+    console.log('Charge success: ', { charge });
     status = 'success';
-    res.send({ orderCode, cart, total, status});
+    res.send({ orderCode, cart, total, status });
   } catch (error) {
     status = 'failure';
     next(error);
