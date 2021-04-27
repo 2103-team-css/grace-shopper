@@ -5,6 +5,8 @@ import Navbar from './components/Navbar';
 import Routes from './Routes';
 import { fetchHistory } from './store/orderHistory';
 
+import { CssBaseline } from '@material-ui/core';
+
 const App = () => {
   const userId = useSelector((state) => state.auth.id);
   const dispatch = useDispatch();
@@ -20,10 +22,11 @@ const App = () => {
   }, [userId]);
 
   return (
-    <div>
+    <React.Fragment>
+      <CssBaseline />
       <Navbar />
       <Routes />
-    </div>
+    </React.Fragment>
   );
 };
 

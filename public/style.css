@@ -1,5 +1,13 @@
-body {
+html,
+body,
+#app {
   font-family: sans-serif;
+  height: 100%;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
 }
 
 a {

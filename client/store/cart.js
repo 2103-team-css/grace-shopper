@@ -3,7 +3,6 @@ import { v4 as uuid } from 'uuid';
 import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
-
 toast.configure();
 
 //action types
@@ -87,13 +86,12 @@ export const createCartItem = (userId, name, price, quantity, productId) => {
             },
           }
         );
-        console.log('cartItem>>>', cartItem);
-        if(cartItem.id) {
-          console.log('toast add to cart block hit!');
-          toast(`${cartItem.name} added to your cart!`, { type: 'success' } );
+        if (cartItem.id) {
+          toast(`${cartItem.name} added to your cart!`, { type: 'success' });
         }
         dispatch(addToCart(cartItem, false));
       } else {
+        toast(`${name} added to your cart!`, { type: 'success' });
         dispatch(addToCart({ id: uuid(), quantity, productId, name, price }, true));
       }
     } catch (error) {
@@ -111,12 +109,12 @@ export const deleteCartItem = (userId, cartId) => {
             authorization: localStorage.getItem('token'),
           },
         });
-        if(cartItem.id) {
-          console.log('toast remove from cart block hit!');
-          toast(`${cartItem.name} removed from your cart!`, { type: 'success' } );
+        if (cartItem.id) {
+          toast(`${cartItem.name} removed from your cart!`, { type: 'success' });
         }
         dispatch(removeFromCart(cartItem.id, false));
       } else {
+        toast(`Item removed from your cart!`, { type: 'success' });
         dispatch(removeFromCart(cartId, true));
       }
     } catch (error) {
@@ -125,7 +123,7 @@ export const deleteCartItem = (userId, cartId) => {
   };
 };
 
-export const updateCartItem = (userId, cartId, productId, quantity, price, name) => {
+export const updateCartItem = ({ userId, cartId, productId, quantity, price, name }) => {
   return async (dispatch) => {
     try {
       if (userId) {
@@ -168,7 +166,7 @@ export const removeCart = (userId) => {
 };
 
 const existsDuplicate = (cart, newItem) => {
-  return cart.some((item) => item.cart.productId === newItem.cart.productId);
+  return cart.some((item) => item.productId === newItem.productId);
 };
 
 const setLocalCart = (cart) => {

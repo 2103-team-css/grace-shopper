@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const UPDATE_USER = "UPDATE_USER";
-export const SET_USER = "SET_USER";
-export const DELETE_USER = "DELETE_USER";
+export const UPDATE_USER = 'UPDATE_USER';
+export const SET_USER = 'SET_USER';
+export const DELETE_USER = 'DELETE_USER';
 
 const setUsers = (users) => {
   return {
@@ -26,40 +26,48 @@ export const _deleteUser = (user) => {
 
 export const fetchUsers = () => {
   return async (dispatch) => {
-    const { data: users } = await axios.get("/api/admin/users", {
-      headers: {
-        authorization: localStorage.getItem("token"),
-      },
-    });
-    dispatch(setUsers(users));
+    try {
+      const { data: users } = await axios.get('/api/admin/users', {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      });
+      dispatch(setUsers(users));
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
 export const updateUser = (user, history) => {
   return async (dispatch) => {
-    const { data: updated } = await axios.put(
-      `/api/admin/users/${user.id}`,
-      user,
-      {
+    try {
+      const { data: updated } = await axios.put(`/api/admin/users/${user.id}`, user, {
         headers: {
-          authorization: localStorage.getItem("token"),
+          authorization: localStorage.getItem('token'),
         },
-      }
-    );
-    dispatch(_updateUser(updated));
-    history.push("/");
+      });
+      dispatch(_updateUser(updated));
+      history.push('/admin/users');
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
 export const deleteUser = (user, history) => {
   return async (dispatch) => {
-    await axios.delete(`/api/admin/users/${user.id}`, {
-      headers: {
-        authorization: localStorage.getItem("token"),
-      },
-    });
-    dispatch(_deleteUser(user));
-    history.push("/");
+    try {
+      await axios.delete(`/api/admin/users/${user.id}`, {
+        headers: {
+          authorization: localStorage.getItem('token'),
+        },
+      });
+      dispatch(_deleteUser(user));
+      history.push('/admin/users');
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
@@ -74,9 +82,7 @@ export default function usersReducer(state = initialState, action) {
     case UPDATE_USER:
       return {
         ...state,
-        all: state.all.map((user) =>
-          user.id === action.user.id ? action.user : user
-        ),
+        all: state.all.map((user) => (user.id === action.user.id ? action.user : user)),
       };
     case DELETE_USER:
       return {

@@ -2,10 +2,54 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchProducts } from '../store/products';
 import { createCartItem } from '../store/cart';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import Pagination from './Pagination';
 
+import {
+  Grid,
+  Typography,
+  Button,
+  Box,
+  makeStyles,
+  Container,
+  FormControlLabel,
+  Checkbox,
+  Card,
+  CardMedia,
+  CardContent,
+  Link,
+} from '@material-ui/core';
+
+const useStyles = makeStyles(() => ({
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    margin: '2rem 0',
+  },
+  filterSection: {
+    maxWidth: '80%',
+    margin: '0 auto',
+  },
+  cardRoot: {
+    display: 'flex',
+    padding: 10,
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  content: {
+    flex: '1 0 auto',
+  },
+  cover: {
+    height: 200,
+    width: 200,
+  },
+}));
+
 const AllProducts = (props) => {
+  const classes = useStyles();
+
   useEffect(() => {
     props.getProducts();
   }, []);
@@ -17,7 +61,7 @@ const AllProducts = (props) => {
   const [access, setAccess] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(8);
+  const [productsPerPage] = useState(9);
 
   const filteredArr = (products, category) => {
     return products.filter((product) => product.category !== category);
@@ -40,7 +84,6 @@ const AllProducts = (props) => {
   };
 
   let filteredProd = [...products]; //all of the prod
-  console.log(props);
   if (perc === false) filteredProd = filteredArr(filteredProd, 'percussion');
   if (strs === false) filteredProd = filteredArr(filteredProd, 'string');
   if (keys === false) filteredProd = filteredArr(filteredProd, 'keys');
@@ -51,85 +94,98 @@ const AllProducts = (props) => {
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProd.slice(indexOfFirstProduct, indexOfLastProduct);
   //page-changer:
-  const paginate = (pageNum) => setCurrentPage(pageNum);
+  const paginate = (event, num) => {
+    setCurrentPage(num);
+  };
 
   return (
-    <div className='all-products-container'>
-      <div className='filter-div'>
-        <h3>Filter By Category</h3>
-        <label>Percussion:</label>
-
-        <input
-          type='checkbox'
-          name='perc'
-          checked={perc}
-          value={perc}
-          onChange={updatePercussion}
+    <Container>
+      <Box className={classes.header}>
+        <Typography variant="h3">Our Products</Typography>
+      </Box>
+      <Typography variant="h5" align="center">
+        Filter by Category
+      </Typography>
+      <Grid container spacing={3} className={classes.filterSection} justify="center">
+        <Grid item xs={12} sm={3}>
+          <FormControlLabel
+            control={
+              <Checkbox checked={perc} onChange={updatePercussion} name="perc" color="primary" />
+            }
+            label="Percussion"
+            labelPlacement="top"
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <FormControlLabel
+            control={
+              <Checkbox checked={strs} onChange={updateString} name="strs" color="primary" />
+            }
+            label="Strings"
+            labelPlacement="top"
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <FormControlLabel
+            control={<Checkbox checked={keys} onChange={updateKey} name="keys" color="primary" />}
+            label="Keys"
+            labelPlacement="top"
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <FormControlLabel
+            control={
+              <Checkbox checked={access} onChange={updateAccessory} name="access" color="primary" />
+            }
+            label="Accesories"
+            labelPlacement="top"
+          />
+        </Grid>
+      </Grid>
+      <Box mt={3} display="flex" justifyContent="center">
+        <Pagination
+          productsPerPage={productsPerPage}
+          totalProducts={filteredProd.length}
+          paginate={paginate}
         />
-        <label>Strings:</label>
-        <input
-          type='checkbox'
-          name='strs'
-          checked={strs}
-          value={strs}
-          onChange={updateString}
-        />
-        <label>Keys:</label>
-        <input
-          type='checkbox'
-          name='keys'
-          checked={keys}
-          value={keys}
-          onChange={updateKey}
-        />
-        <label>Accesories:</label>
-        <input
-          type='checkbox'
-          name='access'
-          checked={access}
-          value={access}
-          onChange={updateAccessory}
-        />
-      </div>
-      {currentProducts.map((product) => {
-        return (
-          <div key={product.id} className='product-container'>
-            <Link to={`/products/${product.id}`}>
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                heigt='150'
-                width='200'
-                className='product-image'
-              />
-              <h3>Name:{product.name}</h3>
-            </Link>
-            <p>Price: ${product.price}</p>
-
-            <button
-              onClick={() => {
-                props.addToCart(
-                  userId,
-                  product.name,
-                  product.price,
-                  1,
-                  product.id
-                );
-              }}
-            >
-              Add to Cart
-            </button>
-            <p>{product.quantity} Left in Stock</p>
-            <p>{product.category}</p>
-          </div>
-        );
-      })}
-      <Pagination 
-      productsPerPage={productsPerPage} 
-      totalProducts={filteredProd.length} 
-      paginate={paginate}
-      />
-    </div>
+      </Box>
+      <Box mt={3}>
+        <Grid container spacing={2}>
+          {currentProducts.map((product) => (
+            <Grid item key={product.id} xs={12} md={6} lg={4}>
+              <Card className={classes.cardRoot}>
+                <CardMedia className={classes.cover} image={product.imageUrl} />
+                <Box className={classes.details}>
+                  <CardContent className={classes.content}>
+                    <Link to={`/products/${product.id}`} component={RouterLink}>
+                      <Typography variant="h5">{product.name}</Typography>
+                    </Link>
+                    <Typography>
+                      <strong>Price:</strong> ${product.price / 100}
+                    </Typography>
+                    <Typography>
+                      <strong>{product.quantity} Left in Stock</strong>
+                    </Typography>
+                    {/* <Typography>{product.category}</Typography> */}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      disableElevation
+                      onClick={() => {
+                        props.addToCart(userId, product.name, product.price, 1, product.id);
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
+                  </CardContent>
+                </Box>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </Container>
   );
 };
 
