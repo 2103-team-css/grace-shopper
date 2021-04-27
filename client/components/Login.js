@@ -3,47 +3,69 @@ import { connect } from 'react-redux';
 import { authenticateLogin } from '../store';
 import { withFormik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Container, makeStyles, Grid, Box } from '@material-ui/core';
+
+const useStyles = makeStyles(() => ({
+  formContainer: {
+    margin: '1rem auto',
+  },
+  form: {
+    width: '100%',
+  },
+}));
 
 /** Reformatted with Formik: */
-const LoginForm = ({ values, errors, touched, handleChange, isSubmitting }) => (
-  <div>
-    <Form style={{ margin: '6px' }} name={values.displayName}>
-      <div>
-        <label>Email: </label>
-        <Field
-          as={TextField}
-          style={{ height: '25px' }}
-          name="email"
-          placeholder="email"
-          onChange={handleChange}
-        />
-        <div style={{ color: 'red' }}>{touched.email && errors.email && <p>{errors.email}</p>}</div>
-      </div>
-      <p />
-      <div>
-        <label>Password: </label>
-        <Field
-          as={TextField}
-          style={{ height: '25px' }}
-          name="password"
-          placeholder="password"
-          onChange={handleChange}
-          type="password"
-        />
-        <div style={{ color: 'red' }}>
-          {touched.password && errors.password && <p>{errors.password}</p>}
-        </div>
-      </div>
-      <p />
-      <div>
-        <Button type="submit" disabled={isSubmitting}>
-          Login
-        </Button>
-      </div>
-    </Form>
-  </div>
-);
+const LoginForm = ({ values, errors, touched, handleChange, isSubmitting }) => {
+  const classes = useStyles();
+  return (
+    <Container maxWidth="sm" className={classes.formContainer}>
+      <Box mt={3}>
+        <Form name={values.displayName} className={classes.form}>
+          <Grid container spacing={2} direction="column" alignItems="center">
+            <Grid item xs={12} sm={6}>
+              <Field
+                as={TextField}
+                id="email"
+                label="Email"
+                variant="outlined"
+                fullWidth
+                error={touched.email && !!errors.email}
+                helperText={errors.email}
+                name="email"
+                placeholder="email"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field
+                as={TextField}
+                id="password"
+                label="Password"
+                variant="outlined"
+                fullWidth
+                error={touched.password && !!errors.password}
+                helperText={errors.password}
+                name="password"
+                placeholder="password"
+                type="password"
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                variant="contained"
+                fullWidth
+                color="primary"
+              >
+                Login
+              </Button>
+            </Grid>
+          </Grid>
+        </Form>
+      </Box>
+    </Container>
+  );
+};
 
 const LoginFormApp = withFormik({
   mapPropsToValues() {

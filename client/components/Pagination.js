@@ -2,12 +2,11 @@ import React from 'react';
 
 import { Pagination as Paginate } from '@material-ui/lab';
 
-const Pagination = ({ productsPerPage, totalProducts, paginate }) => {
-  const pageCount = Math.ceil(totalProducts / productsPerPage);
+const Pagination = ({ pageCount, paginate, currentPage }) => {
   return (
     <Paginate
       count={pageCount}
-      defaultPage={1}
+      page={currentPage}
       onChange={paginate}
       size="large"
       variant="outlined"

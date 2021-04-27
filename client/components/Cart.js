@@ -17,7 +17,12 @@ import {
   TableHead,
   TableRow,
   Paper,
+  IconButton,
 } from '@material-ui/core';
+
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 const useStyles = makeStyles(() => ({
   checkout: {
@@ -28,11 +33,9 @@ const useStyles = makeStyles(() => ({
   },
   decrement: {
     color: '#f54281',
-    fontSize: '2rem',
   },
   increment: {
     color: '#32b324',
-    fontSize: '2rem',
   },
 }));
 
@@ -62,48 +65,39 @@ const Cart = () => {
     <Container>
       <Box mt={3}>
         <Typography variant="h4">My Cart</Typography>
-        <Box mt={2}>
-          <Button
-            variant="contained"
-            size="small"
-            color="secondary"
-            onClick={() => {
-              dispatch(removeCart(userId));
-            }}
-          >
-            Clear Cart
-          </Button>
-        </Box>
         <Box mt={3}>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
+                  <TableCell />
                   <TableCell>Item</TableCell>
-                  <TableCell align="right">Price ($)</TableCell>
-                  <TableCell align="right">Quantity</TableCell>
+                  <TableCell align="center">Price ($)</TableCell>
+                  <TableCell align="center">Quantity</TableCell>
                   <TableCell align="right">Total ($)</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {cart.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell component="th" scope="row">
-                      <Link to={`/products/${item.productId}`} component={RouterLink}>
-                        {item.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell align="right">{item.price / 100}</TableCell>
-                    <TableCell align="right">
-                      <Button
+                    <TableCell>
+                      <IconButton
                         className={classes.remove}
                         onClick={() => {
                           dispatch(deleteCartItem(userId, item.id));
                         }}
                       >
-                        X
-                      </Button>
-                      <Button
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      <Link to={`/products/${item.productId}`} component={RouterLink}>
+                        {item.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell align="center">{item.price / 100}</TableCell>
+                    <TableCell align="center">
+                      <IconButton
                         className={classes.decrement}
                         onClick={() => {
                           if (item.quantity <= 1) {
@@ -112,17 +106,18 @@ const Cart = () => {
                           changeQty(item, -1);
                         }}
                       >
-                        -
-                      </Button>
+                        <RemoveIcon />
+                      </IconButton>
                       {item.quantity}
-                      <Button onClick={() => changeQty(item, 1)} className={classes.increment}>
-                        +
-                      </Button>
+                      <IconButton onClick={() => changeQty(item, 1)} className={classes.increment}>
+                        <AddIcon />
+                      </IconButton>
                     </TableCell>
                     <TableCell align="right">{(item.price * item.quantity) / 100}</TableCell>
                   </TableRow>
                 ))}
                 <TableRow>
+                  <TableCell />
                   <TableCell component="th" scope="row" />
                   <TableCell align="right" />
                   <TableCell align="right" />
@@ -133,6 +128,16 @@ const Cart = () => {
           </TableContainer>
         </Box>
         <Box mt={2}>
+        <Button
+            variant="contained"
+            size="small"
+            color="secondary"
+            onClick={() => {
+              dispatch(removeCart(userId));
+            }}
+          >
+            Clear Cart
+          </Button>
           <Button
             className={classes.checkout}
             to="/checkout"

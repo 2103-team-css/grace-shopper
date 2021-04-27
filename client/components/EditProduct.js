@@ -1,18 +1,35 @@
-import React, { Component } from "react";
-import { updateProduct, deleteProduct } from "../store/products";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { updateProduct } from '../store/products';
+import { connect } from 'react-redux';
+
+import { Button, TextField, Container, withStyles, Grid } from '@material-ui/core';
+
+const styles = () => ({
+  form: {
+    width: '100%',
+  },
+  submit: {
+    margin: '1rem 0',
+  },
+  formContainer: {
+    margin: '1rem auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+});
 
 class EditProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      code: props.product.code || "",
-      name: props.product.name || "",
+      code: props.product.code || '',
+      name: props.product.name || '',
       quantity: props.product.quantity,
-      imageUrl: props.product.imageUrl || "",
-      description: props.product.description || "",
+      imageUrl: props.product.imageUrl || '',
+      description: props.product.description || '',
       price: props.product.price,
-      category: props.product.category || "",
+      category: props.product.category || '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -53,61 +70,110 @@ class EditProduct extends Component {
 
   handleSubmit(evt) {
     evt.preventDefault();
-    this.props.updateProduct(
-      { ...this.props.product, ...this.state },
-      this.props.match.params.id
-    );
+    this.props.updateProduct({ ...this.props.product, ...this.state }, this.props.match.params.id);
   }
 
   render() {
-    const {
-      code,
-      name,
-      quantity,
-      imageUrl,
-      description,
-      price,
-      category,
-    } = this.state;
+    const { code, name, quantity, imageUrl, description, price, category } = this.state;
     const { handleSubmit, handleChange } = this;
 
+    const { classes } = this.props;
+
     return (
-      <div>
+      <Container maxWidth="sm" className={classes.formContainer}>
         <form id="updateProduct-form" onSubmit={handleSubmit}>
-          <label htmlFor="name">Name: </label>
-          <input name="name" onChange={handleChange} value={name} />
-
-          <label htmlFor="code">Code: </label>
-          <input name="code" onChange={handleChange} value={code} />
-
-          <label htmlFor="quantity">Quantity: </label>
-          <input name="quantity" onChange={handleChange} value={quantity} />
-
-          <label htmlFor="imageUrl">Image Url: </label>
-          <input name="imageUrl" onChange={handleChange} value={imageUrl} />
-
-          <label htmlFor="description">Description: </label>
-          <input
-            name="description"
-            onChange={handleChange}
-            value={description}
-          />
-
-          <label htmlFor="price">Price: </label>
-          <input name="price" onChange={handleChange} value={price} />
-
-          <label htmlFor="category">Category: </label>
-          <input name="category" onChange={handleChange} value={category} />
-
-          <button type="submit">Submit</button>
-          {/* <button
-            className="remove"
-            onClick={() => this.props.deleteProduct(this.props.product)}
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="name"
+                name="name"
+                label="Product Name"
+                variant="outlined"
+                fullWidth
+                value={name}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="code"
+                name="code"
+                label="Code"
+                variant="outlined"
+                fullWidth
+                value={code}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                type="number"
+                id="quantity"
+                name="quantity"
+                label="Quantity"
+                variant="outlined"
+                fullWidth
+                value={quantity}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="description"
+                name="description"
+                label="Description"
+                variant="outlined"
+                fullWidth
+                value={description}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                type="number"
+                id="price"
+                name="price"
+                label="Price"
+                variant="outlined"
+                fullWidth
+                value={price}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="imageUrl"
+                name="imageUrl"
+                label="Image URL"
+                variant="outlined"
+                fullWidth
+                value={imageUrl}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="category"
+                name="category"
+                label="Category"
+                variant="outlined"
+                fullWidth
+                value={category}
+                onChange={handleChange}
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            color="primary"
+            className={classes.submit}
           >
-            X
-          </button> */}
+            Submit
+          </Button>
         </form>
-      </div>
+      </Container>
     );
   }
 }
@@ -120,4 +186,4 @@ const mapDispatchToProps = (dispatch, { history }) => ({
   updateProduct: (product, id) => dispatch(updateProduct(product, history, id)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EditProduct));
